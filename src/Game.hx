@@ -3,6 +3,7 @@ package;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.Sprite;
+import openfl.errors.Error;
 import openfl.events.Event;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
@@ -23,6 +24,8 @@ class Game extends Sprite
 	static public var WIDTH:Int = Lib.current.stage.stageWidth;
 	static public var HEIGHT:Int = Lib.current.stage.stageHeight;
 	
+	static public var INST:Game;
+	
 	var shakeOffset:Int = 10;
 	var shakeAmount:Int = 3;
 	var shakeTick:Int;
@@ -35,6 +38,11 @@ class Game extends Sprite
 	
 	public function new ()
 	{
+		if (INST != null)
+			throw new Error("Game already instanciated!");
+		else
+			INST = this;
+		
 		super();
 		
 		canvasData = new BitmapData(WIDTH + 2 * shakeOffset, HEIGHT + 2 * shakeOffset, false, 0xFF001942);
@@ -76,8 +84,18 @@ class Game extends Sprite
 		canvasData.fillRect(canvasData.rect, 0xFF001942);
 		
 		for (e in entities) {
-			Sprites.draw(canvasData, e.spriteID, e.x, e.y);
+			Sprites.draw(canvasData, e.spriteID, e.x, e.y, e.frame);
 		}
+	}
+	
+	public function spawnBullet ()
+	{
+		var b = new Bullet();
+		b.x = player.x + 43;
+		b.y = player.y - 37;
+		entities.push(b);
+		entities.remove(player);
+		entities.push(player);
 	}
 	
 }

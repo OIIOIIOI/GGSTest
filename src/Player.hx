@@ -15,10 +15,14 @@ class Player extends MovingEntity
 	public function new ()
 	{
 		super();
-		spriteID = Sprites.PLAYER_SHIP;
+		setAnim(Sprites.PLAYER_SHIP);
+		
+		friction = 0.9;
+		xVelMax = 5;
+		yVelMax = 3;
 		
 		isFiring = false;
-		fireRate = 20;
+		fireRate = 10;
 		fireTick = 0;
 	}
 	
@@ -26,13 +30,13 @@ class Player extends MovingEntity
 	{
 		// Player controls
 		if (Controls.isDown(Keyboard.RIGHT))
-			xVel += xVelStep;
+			xVel += xVelMax * 0.2;
 		if (Controls.isDown(Keyboard.LEFT))
-			xVel -= xVelStep;
+			xVel -= xVelMax * 0.2;
 		if (Controls.isDown(Keyboard.UP))
-			yVel -= yVelStep;
+			yVel -= yVelMax * 0.2;
 		if (Controls.isDown(Keyboard.DOWN))
-			yVel += yVelStep;
+			yVel += yVelMax * 0.2;
 		
 		// MovingEntity update
 		super.update();
@@ -42,7 +46,7 @@ class Player extends MovingEntity
 		
 		if (isFiring) {
 			if (fireTick == 0) {
-				// FIRE!
+				Game.INST.spawnBullet();
 				fireTick = fireRate;
 			}
 			else

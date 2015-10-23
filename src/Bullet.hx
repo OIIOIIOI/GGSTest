@@ -4,13 +4,18 @@ package;
  * ...
  * @author 01101101
  */
-class Bullet extends Entity
+class Bullet extends MovingEntity
 {
 	
 	public function new ()
 	{
 		super();
-		spriteID = Sprites.BULLET;
+		setAnim(Sprites.BULLET);
+		
+		friction = 1;
+		xVelMax = 0;
+		yVelMax = 40;
+		yVel = -yVelMax;
 	}
 	
 }
