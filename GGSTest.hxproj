@@ -6,8 +6,8 @@
     <movie input="" />
     <movie path="project.xml" />
     <movie fps="60" />
-    <movie width="800" />
-    <movie height="480" />
+    <movie width="400" />
+    <movie height="600" />
     <movie version="1" />
     <movie minorVersion="0" />
     <movie platform="Lime" />
@@ -18,13 +18,12 @@
   <classpaths>
     <class path="C:\HaxeToolkit\haxe\lib\openfl\3,3,9" />
     <class path="C:\HaxeToolkit\haxe\lib\lime\2,6,9" />
-    <class path="C:\HaxeToolkit\haxe\lib\actuate\1,8,6" />
     <class path="src" />
     <class path="bin\flash\haxe" />
   </classpaths>
   <!-- Build options -->
   <build>
-    <option directives="openfl=3.3.9&#xA;lime=2.6.9&#xA;actuate=1.8.6&#xA;openfl-next&#xA;tools=2.6.9&#xA;no-compilation&#xA;openfl-flash&#xA;web&#xA;display" />
+    <option directives="openfl=3.3.9&#xA;lime=2.6.9&#xA;openfl-next&#xA;tools=2.6.9&#xA;no-compilation&#xA;openfl-flash&#xA;web&#xA;display" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
     <option mainClass="ApplicationMain" />

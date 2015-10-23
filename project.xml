@@ -9,13 +9,12 @@
 	<app main="Main" file="GGSTest" path="bin" />
 	
 	<window background="#000000" fps="60" />
-	<window width="800" height="480" unless="mobile" />
-	<window orientation="landscape" vsync="false" antialiasing="0" if="cpp" />
+	<window width="400" height="600" unless="mobile" />
+	<window orientation="portrait" vsync="false" antialiasing="0" if="cpp" />
 	
 	<!-- classpath, haxe libs -->
 	<source path="src" />
 	<haxelib name="openfl" />
-	<haxelib name="actuate" />
 	
 	<!-- assets -->
 	<icon path="assets/openfl.svg" />

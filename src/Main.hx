@@ -7,15 +7,17 @@ import openfl.Lib;
  * ...
  * @author 01101101
  */
-class Main extends Sprite 
+class Main extends Sprite
 {
-
-	public function new() 
+	
+	public function new () 
 	{
 		super();
 		
-		// Assets:
-		// openfl.Assets.getBitmapData("img/assetname.jpg");
+		Sprites.init();
+		Controls.init();
+		
+		Lib.current.stage.addChild(new Game());
 	}
 
 }
