@@ -11,16 +11,23 @@ import openfl.display.BitmapData;
 class Sprites
 {
 	
+	static public var ENEMY_SHIP:String = "enemy_ship";
 	static public var PLAYER_SHIP:String = "player_ship";
 	static public var BULLET:String = "bullet";
+	
+	static public var BULLET_PART:String = "bullet_part";
 	
 	static var sprites:Map<String, SpriteSheet>;
 	
 	static public function init ()
 	{
 		sprites = new Map();
-		sprites.set(PLAYER_SHIP, { data:Assets.getBitmapData("img/playerShip1_orange.png"), frames:1, delay:0 });
-		sprites.set(BULLET, { data:Assets.getBitmapData("img/laserGreen04.png"), frames:1, delay:0 });
+		
+		sprites.set(ENEMY_SHIP, { data:Assets.getBitmapData("img/enemy3X.png"), frames:1, delay:0 });
+		sprites.set(PLAYER_SHIP, { data:Assets.getBitmapData("img/ship3X.png"), frames:2, delay:3 });
+		sprites.set(BULLET, { data:Assets.getBitmapData("img/bullet3X.png"), frames:1, delay:0 });
+		
+		sprites.set(BULLET_PART, { data:new BitmapData(3, 3, false, 0xFFECD078), frames:1, delay:0 } );
 	}
 	
 	static public function getSheet (id:String) :SpriteSheet
@@ -43,8 +50,8 @@ class Sprites
 		Game.TAR.x = frame * Game.TAR.width;
 		Game.TAR.y = 0;
 		
-		Game.TAP.x = x;
-		Game.TAP.y = y;
+		Game.TAP.x = Math.round(x);
+		Game.TAP.y = Math.round(y);
 		
 		c.copyPixels(data, Game.TAR, Game.TAP);
 	}

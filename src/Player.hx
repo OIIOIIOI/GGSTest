@@ -1,5 +1,6 @@
 package;
 
+import Entity;
 import openfl.ui.Keyboard;
 
 /**
@@ -16,6 +17,10 @@ class Player extends MovingEntity
 	{
 		super();
 		setAnim(Sprites.PLAYER_SHIP);
+		
+		collRadius = 15;
+		collType = CollType.PLAYER;
+		collList.push(CollType.ENEMY);
 		
 		friction = 0.9;
 		xVelMax = 5;

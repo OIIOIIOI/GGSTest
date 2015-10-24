@@ -16,8 +16,8 @@ class MovingEntity extends Entity
 	{
 		super();
 		friction = 1;
-		xVelMax = 2;
-		yVelMax = 2;
+		xVelMax = 100;
+		yVelMax = 100;
 		xVel = yVel = 0;
 	}
 	
@@ -34,6 +34,10 @@ class MovingEntity extends Entity
 		if (Math.abs(yVel) < 0.01)
 			yVel = 0;
 		y += yVel;
+		
+		if (x < -100 || x > Game.WIDTH + 100 || y < -100 || y > Game.HEIGHT + 100) {
+			isDead = true;
+		}
 	}
 	
 }
