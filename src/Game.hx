@@ -56,10 +56,16 @@ class Game extends Sprite
 		entities = [];
 		particles = [];
 		
-		for (i in 0...5) {
+		for (i in 0...3) {
+			var e = new Asteroid();
+			e.x = Std.random(WIDTH - e.cx * 2);
+			e.y = Std.random(Std.int(HEIGHT / 3 * 2));
+			entities.push(e);
+		}
+		for (i in 0...3) {
 			var e = new Enemy();
-			e.x = Std.random(WIDTH - 48);
-			e.y = Std.random(Std.int(HEIGHT / 2));
+			e.x = Std.random(WIDTH - e.cx * 2);
+			e.y = Std.random(Std.int(HEIGHT / 3 * 2));
 			entities.push(e);
 		}
 		
@@ -142,18 +148,35 @@ class Game extends Sprite
 	
 	function resolveCollision (ea:Entity, eb:Entity)
 	{
-		ea.isDead = true;
-		eb.isDead = true;
-		if (ea.collType == CollType.ENEMY || eb.collType == CollType.ENEMY) {
+		if (!ea.isIndestructible)
+			die(ea);
+		else if (eb.collType == CollType.PLAYER_BULLET)
+			SoundMan.playOnce(SoundMan.INDESTRUCTIBLE);
+		
+		if (!eb.isIndestructible)
+			die(eb);
+		else if (ea.collType == CollType.PLAYER_BULLET)
+			SoundMan.playOnce(SoundMan.INDESTRUCTIBLE);
+	}
+	
+	function die (e:Entity)
+	{
+		e.isDead = true;
+		
+		if (e.collType == CollType.ENEMY) {
 			shake(3, 6);
 			SoundMan.playOnce(SoundMan.ENEMY_DEATH);
 		}
 		
-		if (ea.collType == CollType.PLAYER_BULLET)
-			spawnParticles(ParticleType.BULLET, ea.x, ea.y);
-		
-		if (eb.collType == CollType.PLAYER_BULLET)
-			spawnParticles(ParticleType.BULLET, eb.x, eb.y);
+		switch (e.spriteID)
+		{
+			case Sprites.PLAYER_BULLET:
+				spawnParticles(ParticleType.PLAYER_BULLET, e.x + e.cx, e.y + e.cy);
+			case Sprites.ENEMY_A_SHIP:
+				spawnParticles(ParticleType.ENEMY_A, e.x + e.cx, e.y + e.cy);
+			case Sprites.ASTEROID:
+				spawnParticles(ParticleType.ASTEROID, e.x + e.cx, e.y + e.cy);
+		}
 	}
 	
 	function render ()
@@ -197,12 +220,20 @@ class Game extends Sprite
 	{
 		switch (t)
 		{
-			case ParticleType.BULLET:
+			case ParticleType.PLAYER_BULLET:
 				for (i in 0...15)
 				{
 					var p = new Particle(t);
 					p.x = px;
 					p.y = py;
+					particles.push(p);
+				}
+			case ParticleType.ENEMY_A, ParticleType.ASTEROID:
+				for (i in 0...8)
+				{
+					var p = new Particle(t);
+					p.x = px + (Std.random(2) * 2 - 1) * Std.random(32);
+					p.y = py + (Std.random(2) * 2 - 1) * Std.random(32);
 					particles.push(p);
 				}
 		}

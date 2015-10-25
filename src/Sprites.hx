@@ -10,12 +10,14 @@ import openfl.display.BitmapData;
  */
 class Sprites
 {
-	
-	static public var ENEMY_SHIP:String = "enemy_ship";
+	static public var ENEMY_A_SHIP:String = "enemy_ship";
 	static public var PLAYER_SHIP:String = "player_ship";
-	static public var BULLET:String = "bullet";
+	static public var PLAYER_BULLET:String = "bullet";
+	static public var ASTEROID:String = "asteroid";
 	
-	static public var BULLET_PART:String = "bullet_part";
+	static public var PLAYER_BULLET_PART:String = "bullet_part";
+	static public var ENEMY_A_PART:String = "enemy_a_part";
+	static public var ASTEROID_PART:String = "asteroid_part";
 	
 	static var sprites:Map<String, SpriteSheet>;
 	
@@ -23,11 +25,14 @@ class Sprites
 	{
 		sprites = new Map();
 		
-		sprites.set(ENEMY_SHIP, { data:Assets.getBitmapData("img/enemy3X.png"), frames:1, delay:0 });
-		sprites.set(PLAYER_SHIP, { data:Assets.getBitmapData("img/ship3X.png"), frames:2, delay:3 });
-		sprites.set(BULLET, { data:Assets.getBitmapData("img/bullet3X.png"), frames:1, delay:0 });
+		sprites.set(ENEMY_A_SHIP, { data:Assets.getBitmapData("img/enemy_a.png"), frames:2, delay:20 });
+		sprites.set(PLAYER_SHIP, { data:Assets.getBitmapData("img/player.png"), frames:2, delay:3 });
+		sprites.set(PLAYER_BULLET, { data:Assets.getBitmapData("img/player_bullet.png"), frames:1, delay:0 });
+		sprites.set(ASTEROID, { data:Assets.getBitmapData("img/asteroid.png"), frames:1, delay:0 });
 		
-		sprites.set(BULLET_PART, { data:new BitmapData(3, 3, false, 0xFFECD078), frames:1, delay:0 } );
+		sprites.set(PLAYER_BULLET_PART, { data:new BitmapData(3, 3, false, 0xFFECD078), frames:1, delay:0 } );
+		sprites.set(ENEMY_A_PART, { data:Assets.getBitmapData("img/enemy_a_particles.png"), frames:4, delay:0 } );
+		sprites.set(ASTEROID_PART, { data:Assets.getBitmapData("img/asteroid_particles.png"), frames:4, delay:0 } );
 	}
 	
 	static public function getSheet (id:String) :SpriteSheet
@@ -63,3 +68,13 @@ typedef SpriteSheet = {
 	frames:Int,
 	delay:Int
 }
+
+/*
+ * PALETTE:
+ * 
+ * Purple:	542437
+ * Red:		C02942
+ * Orange:	D95B43
+ * Yellow:	ECD078
+ * Blue:	53777A
+*/

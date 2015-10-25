@@ -1,6 +1,7 @@
 package;
 
 import Entity;
+import MovingEntity;
 import openfl.ui.Keyboard;
 
 /**
@@ -29,22 +30,20 @@ class Player extends MovingEntity
 		isFiring = false;
 		fireRate = 10;
 		fireTick = 0;
+		
+		currentMove = Move.CONTROLLED;
+		diesOffScreen = false;
 	}
 	
 	override public function update ()
 	{
-		// Player controls
-		if (Controls.isDown(Keyboard.RIGHT))
-			xVel += xVelMax * 0.2;
-		if (Controls.isDown(Keyboard.LEFT))
-			xVel -= xVelMax * 0.2;
-		if (Controls.isDown(Keyboard.UP))
-			yVel -= yVelMax * 0.2;
-		if (Controls.isDown(Keyboard.DOWN))
-			yVel += yVelMax * 0.2;
-		
 		// MovingEntity update
 		super.update();
+		
+		if (x < 10)	x = 10;
+		else if (x + 2 * cx - 10 > Game.WIDTH)	x = Game.WIDTH - 2 * cx + 10;
+		if (y + 2 * cy - 10 > Game.HEIGHT)	y = Game.HEIGHT - 2 * cy + 10;
+		else if (y < 10)	y = 10;
 		
 		// Player action
 		isFiring = Controls.isDown(Keyboard.SPACE);

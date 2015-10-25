@@ -12,9 +12,9 @@ class Bullet extends MovingEntity
 	public function new ()
 	{
 		super();
-		setAnim(Sprites.BULLET);
+		setAnim(Sprites.PLAYER_BULLET);
 		
-		collRadius = 10;
+		collRadius = 8;
 		collType = CollType.PLAYER_BULLET;
 		collList.push(CollType.ENEMY);
 		

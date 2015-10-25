@@ -24,6 +24,8 @@ class Entity
 	public var collType:CollType;
 	public var collList:Array<CollType>;
 	
+	public var isIndestructible:Bool;
+	
 	public var isDead:Bool;
 	
 	public function new ()
@@ -33,10 +35,11 @@ class Entity
 		x = y = 0;
 		collRadius = 0;
 		collList = [];
+		isIndestructible = false;
 		isDead = false;
 	}
 	
-	public function setAnim (id:String)
+	public function setAnim (id:String, randomStart:Bool = false)
 	{
 		spriteID = id;
 		animDelay = animTick = 0;
@@ -48,6 +51,7 @@ class Entity
 		if (sheet == null)	return;
 		
 		animDelay = animTick = sheet.delay;
+		if (randomStart)	animTick = Std.random(sheet.delay);
 		totalFrames = sheet.frames;
 		
 		cx = Std.int(sheet.data.width / sheet.frames / 2);
