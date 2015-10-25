@@ -25,9 +25,9 @@ class Particle extends MovingEntity {
 				totalFrames = 1;// Disable animation
 				xVel = (Std.random(2) * 2 - 1) * Std.random(100) / 100;
 				yVel = (Std.random(2) * 2 - 1) * Std.random(100) / 100;
-			case ParticleType.ASTEROID:
+			case ParticleType.PLAYER:
 				lifetime = 60 + Std.random(40);
-				setAnim(Sprites.ASTEROID_PART);
+				setAnim(Sprites.PLAYER_PART);
 				frame = Std.random(totalFrames);// Pick a random frame
 				totalFrames = 1;// Disable animation
 				xVel = (Std.random(2) * 2 - 1) * Std.random(100) / 100;
@@ -49,5 +49,5 @@ class Particle extends MovingEntity {
 enum ParticleType {
 	PLAYER_BULLET;
 	ENEMY_A;
-	ASTEROID;
+	PLAYER;
 }

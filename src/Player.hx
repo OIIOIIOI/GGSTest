@@ -24,8 +24,8 @@ class Player extends MovingEntity
 		collList.push(CollType.ENEMY);
 		
 		friction = 0.9;
-		xVelMax = 5;
-		yVelMax = 3;
+		xVelMax = 6;
+		yVelMax = 6;
 		
 		isFiring = false;
 		fireRate = 10;

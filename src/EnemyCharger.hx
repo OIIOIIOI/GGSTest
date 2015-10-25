@@ -1,25 +1,28 @@
 package;
 
 import Entity;
+import MovingEntity;
 
 /**
  * ...
  * @author 01101101
  */
-class Asteroid extends MovingEntity
+class EnemyCharger extends MovingEntity
 {
 	
 	public function new ()
 	{
 		super();
-		setAnim(Sprites.MINE);
+		setAnim(Sprites.ENEMY_CHARGER, true);
 		
-		collRadius = 17;
+		collRadius = 12;
 		collType = CollType.ENEMY;
 		collList.push(CollType.PLAYER);
 		collList.push(CollType.PLAYER_BULLET);
 		
-		isIndestructible = true;
+		xVelMax = yVelMax = 2;
+		
+		currentMove = Move.CHARGER;
 		diesOffScreen = false;
 	}
 	

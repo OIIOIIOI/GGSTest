@@ -1,4 +1,5 @@
 package;
+import openfl.geom.Point;
 import openfl.ui.Keyboard;
 
 /**
@@ -12,6 +13,7 @@ class MovingEntity extends Entity
 	var yVel:Float;
 	var xVelMax:Float;
 	var yVelMax:Float;
+	var velMax:Float;
 	
 	var currentMove:Move;
 	var diesOffScreen:Bool;
@@ -22,6 +24,7 @@ class MovingEntity extends Entity
 		friction = 1;
 		xVelMax = 100;
 		yVelMax = 100;
+		velMax = -1;
 		xVel = yVel = 0;
 		
 		currentMove = Move.STATIC;
@@ -55,6 +58,7 @@ class MovingEntity extends Entity
 		{
 			case STATIC:
 				return;
+			
 			case CONTROLLED:
 				if (Controls.isDown(Keyboard.RIGHT))
 					xVel += xVelMax * 0.2;
@@ -64,12 +68,43 @@ class MovingEntity extends Entity
 					yVel -= yVelMax * 0.2;
 				if (Controls.isDown(Keyboard.DOWN))
 					yVel += yVelMax * 0.2;
+			
+			case CHARGER:
+				if (velMax == -1) {
+					Game.TAP.x = xVelMax;
+					Game.TAP.y = yVelMax;
+					velMax = Game.TAP.length;
+				}
+				var tx = Game.INST.player.x + Game.INST.player.cx;
+				var ty = Game.INST.player.y + Game.INST.player.cy;
+				Game.TAP.x = tx - (x + cx);
+				Game.TAP.y = ty - (y + cy);
+				Game.TAP.normalize(velMax);
+				xVel = Game.TAP.x * xVelMax;
+				yVel = yVelMax;
+			
+			case CHASER:
+				if (velMax == -1) {
+					Game.TAP.x = xVelMax;
+					Game.TAP.y = yVelMax;
+					velMax = Game.TAP.length;
+				}
+				var tx = Game.INST.player.x + Game.INST.player.cx;
+				var ty = Game.INST.player.y + Game.INST.player.cy;
+				Game.TAP.x = tx - (x + cx);
+				Game.TAP.y = ty - (y + cy);
+				Game.TAP.normalize(velMax);
+				xVel = Game.TAP.x * xVelMax;
+				yVel = Game.TAP.y * yVelMax;
 		}
 	}
 	
 }
 
-enum Move {
+enum Move
+{
 	CONTROLLED;
 	STATIC;
+	CHARGER;
+	CHASER;
 }

@@ -37,7 +37,7 @@ class Game extends Sprite
 	var entities:Array<Entity>;
 	var particles:Array<Particle>;
 	
-	var player:Player;
+	public var player:Player;
 	
 	public function new ()
 	{
@@ -59,15 +59,21 @@ class Game extends Sprite
 		for (i in 0...3) {
 			var e = new Asteroid();
 			e.x = Std.random(WIDTH - e.cx * 2);
-			e.y = Std.random(Std.int(HEIGHT / 3 * 2));
+			e.y = Std.random(Std.int(HEIGHT / 3));
 			entities.push(e);
 		}
 		for (i in 0...3) {
-			var e = new Enemy();
-			e.x = Std.random(WIDTH - e.cx * 2);
-			e.y = Std.random(Std.int(HEIGHT / 3 * 2));
+			var e = new EnemyCharger();
+			e.x = WIDTH / 2;
+			e.y = 15 + i * 50;
 			entities.push(e);
 		}
+		/*for (i in 0...3) {
+			var e = new Enemy();
+			e.x = Std.random(WIDTH - e.cx * 2);
+			e.y = Std.random(Std.int(HEIGHT / 3));
+			entities.push(e);
+		}*/
 		
 		player = new Player();
 		player.x = WIDTH / 2 + canvas.x;
@@ -123,15 +129,18 @@ class Game extends Sprite
 		{
 			var ea = entities[i];
 			// Skip entity if dead
-			if (ea.isDead)	continue;
+			if (ea.isDead)
+				continue;
 			
 			for (j in i + 1...entities.length) 
 			{
 				var eb = entities[j];
 				// Skip entity if dead
-				if (eb.isDead)	continue;
+				if (eb.isDead)
+					continue;
 				// Skip check if entities are not supposed to collide
-				if (ea.collList.indexOf(eb.collType) == -1)	continue;
+				if (ea.collList.indexOf(eb.collType) == -1)
+					continue;
 				// Resolve collision if entities are effectively colliding
 				if (getDistance(ea, eb) < ea.collRadius + eb.collRadius)
 					resolveCollision(ea, eb);
@@ -167,15 +176,21 @@ class Game extends Sprite
 			shake(3, 6);
 			SoundMan.playOnce(SoundMan.ENEMY_DEATH);
 		}
+		else if (e.collType == CollType.PLAYER) {
+			shake(6, 60);
+			SoundMan.playOnce(SoundMan.ENEMY_DEATH);
+		}
 		
 		switch (e.spriteID)
 		{
+			case Sprites.PLAYER_SHIP:
+				spawnParticles(ParticleType.PLAYER, e.x + e.cx, e.y + e.cy, 10);
 			case Sprites.PLAYER_BULLET:
-				spawnParticles(ParticleType.PLAYER_BULLET, e.x + e.cx, e.y + e.cy);
+				spawnParticles(ParticleType.PLAYER_BULLET, e.x + e.cx, e.y + e.cy, 15);
 			case Sprites.ENEMY_A_SHIP:
-				spawnParticles(ParticleType.ENEMY_A, e.x + e.cx, e.y + e.cy);
-			case Sprites.ASTEROID:
-				spawnParticles(ParticleType.ASTEROID, e.x + e.cx, e.y + e.cy);
+				spawnParticles(ParticleType.ENEMY_A, e.x + e.cx, e.y + e.cy, 8);
+			case Sprites.ENEMY_CHARGER:
+				spawnParticles(ParticleType.ENEMY_A, e.x + e.cx, e.y + e.cy, 3);
 		}
 	}
 	
@@ -216,24 +231,24 @@ class Game extends Sprite
 		SoundMan.playOnce(SoundMan.PLAYER_SHOT);
 	}
 	
-	public function spawnParticles (t:ParticleType, px:Float, py:Float)
+	public function spawnParticles (t:ParticleType, px:Float, py:Float, amount:Int)
 	{
 		switch (t)
 		{
 			case ParticleType.PLAYER_BULLET:
-				for (i in 0...15)
+				for (i in 0...amount)
 				{
 					var p = new Particle(t);
 					p.x = px;
 					p.y = py;
 					particles.push(p);
 				}
-			case ParticleType.ENEMY_A, ParticleType.ASTEROID:
-				for (i in 0...8)
+			case ParticleType.ENEMY_A, ParticleType.PLAYER:
+				for (i in 0...amount)
 				{
 					var p = new Particle(t);
-					p.x = px + (Std.random(2) * 2 - 1) * Std.random(32);
-					p.y = py + (Std.random(2) * 2 - 1) * Std.random(32);
+					p.x = px + (Std.random(2) * 2 - 1) * Std.random(8);
+					p.y = py + (Std.random(2) * 2 - 1) * Std.random(8);
 					particles.push(p);
 				}
 		}
