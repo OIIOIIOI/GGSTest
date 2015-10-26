@@ -12,19 +12,15 @@
 	<window width="400" height="600" unless="mobile" />
 	<window orientation="portrait" vsync="false" antialiasing="0" if="cpp" />
 	
-	<set name="html5-backend" value="openfl-bitfive" if="html5" />
-	
 	<!-- classpath, haxe libs -->
 	<source path="src" />
-	<haxelib name="openfl-bitfive" if="html5" />
 	<haxelib name="openfl" />
 	
 	<!-- assets -->
 	<icon path="assets/openfl.svg" />
-	<assets path="assets/img" rename="img" />
-	<assets path="assets/fnt" rename="fnt" />
-	<assets path="assets/snd" rename="snd" include="*.mp3" unless="html5" />
-	<assets path="assets/snd" rename="snd" include="*.ogg" if="html5" />
+	<assets path="assets/img" rename="img" include="*.png" />
+	<assets path="assets/fnt" rename="fnt" include="*.ttf" />
+	<assets path="assets/snd" rename="snd" include="*.mp3" />
 	
 	<!-- optimize output
 	<haxeflag name="-dce full" /> -->

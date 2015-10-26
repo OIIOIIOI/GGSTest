@@ -15,12 +15,9 @@ class SoundMan {
 	static public var HURT:String = "snd/hurt";
 	static public var TURRET_SHOT:String = "snd/turretshoot";
 	static public var POINTS:String = "snd/points";
+	static public var START:String = "snd/start";
 	
-	#if html5
-	static var ext:String = ".ogg";
-	#else
 	static var ext:String = ".mp3";
-	#end
 	
 	static public function playOnce (s:String, vol:Float = 1)
 	{

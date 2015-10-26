@@ -6,27 +6,55 @@ package;
  */
 class WaveMan {
 	
+	static public var waveIndex:Int;
 	static var currentWave:Array<Entity>;
 	
 	static public function spawnWave (w:Int)
 	{
+		if (w > 3)	w = 1;
+		waveIndex = w;
 		currentWave = [];
 		
-		switch (w)
+		switch (waveIndex)
 		{
 			case 0:
-				addSideChargers();
-				addMine();
-				addDoubleMine(-100);
-				addTripleMine(-200);
-				addTurret(-50);
-				addDoubleTurret(-100);
+				addStartArea();
+			case 1:
+				addSideChargers(-100);
+				addTurret(-100);
+				addDoubleTurret(-150);
+			case 2:
+				addMine(-100);
+				addDoubleMine(-200);
+				addTripleMine(-300);
+			case 3:
+				addTurret(-100);
+				addTurret(-300);
+				addTripleMine(-150);
+				addDoubleTurret(-200);
 		}
 		
-		for (e in currentWave)
-		{
+		for (e in currentWave) {
 			Game.INST.addEntity(e);
 		}
+		
+		UI.refresh();
+	}
+	
+	static public function update ()
+	{
+		currentWave = currentWave.filter(Game.INST.filterDead);
+		// Spawn the next wave if the current one is done
+		if (currentWave.length == 0)
+			spawnWave(waveIndex + 1);
+	}
+	
+	static function addStartArea ()
+	{
+		var e = new StartArea();
+		e.x = Game.WIDTH / 2 - e.cx + Game.INST.shakeOffset;
+		e.y = Game.HEIGHT / 2 - e.cy + Game.INST.shakeOffset;
+		currentWave.push(e);
 	}
 	
 	static function addSideChargers (y:Int = 0)

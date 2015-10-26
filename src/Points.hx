@@ -40,7 +40,7 @@ class Points extends MovingEntity {
 	override public function hurt (c:CollType)
 	{
 		super.hurt(c);
-		SoundMan.playOnce(SoundMan.POINTS, 0.35 + Std.random(15) / 100);
+		SoundMan.playOnce(SoundMan.POINTS, 0.25);
 		Game.INST.addScore(21);
 	}
 	

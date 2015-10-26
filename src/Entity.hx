@@ -41,18 +41,20 @@ class Entity
 		isDead = false;
 	}
 	
-	public function setAnim (id:String, randomStart:Bool = false)
+	public function setAnim (id:String, randomStart:Bool = false, keepState:Bool = false)
 	{
 		spriteID = id;
-		animDelay = animTick = 0;
+		animDelay = 0;
+		if (!keepState)		animTick = 0;
 		totalFrames = 1;
-		frame = 0;
+		if (!keepState)		frame = 0;
 		cx = cy = 0;
 		
 		var sheet = Sprites.getSheet(spriteID);
 		if (sheet == null)	return;
 		
-		animDelay = animTick = sheet.delay;
+		animDelay = sheet.delay;
+		if (!keepState)		animTick = sheet.delay;
 		if (randomStart)	animTick = Std.random(sheet.delay);
 		totalFrames = sheet.frames;
 		
@@ -101,4 +103,5 @@ enum CollType
 	PLAYER_BULLET;
 	ENEMY_BULLET;
 	POINTS;
+	START;
 }

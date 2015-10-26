@@ -10,6 +10,7 @@ import openfl.geom.Matrix;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
 import openfl.Lib;
+import openfl.ui.Keyboard;
 import Particle;
 
 /**
@@ -27,6 +28,12 @@ class Game extends Sprite
 	static public var HEIGHT:Int = Lib.current.stage.stageHeight;
 	
 	static public var INST:Game;
+	
+	public var tick:Int = 0;
+	
+	public var paused:Bool = false;
+	var canPress:Bool = true;
+	var pauseEntity:Pause;
 	
 	public var shakeOffset:Int = 10;
 	var shakeAmount:Int = 3;
@@ -79,7 +86,33 @@ class Game extends Sprite
 	
 	function update (e:Event)
 	{
-		// Update
+		var pauseTick = 0;
+		if (!canPress && !Controls.isDown(Keyboard.ESCAPE)) {
+			canPress = true;
+		}
+		
+		if (canPress && !paused && Controls.isDown(Keyboard.ESCAPE)) {
+			paused = true;
+			canPress = false;
+			pauseTick = tick;
+			if (pauseEntity == null) {
+				pauseEntity = new Pause();
+				pauseEntity.x = Game.WIDTH / 2 - pauseEntity.cx + Game.INST.shakeOffset;
+				pauseEntity.y = Game.HEIGHT / 2 - pauseEntity.cy + Game.INST.shakeOffset;
+			}
+			entities.push(pauseEntity);
+		}
+		else if (canPress && paused && Controls.isDown(Keyboard.ESCAPE)) {
+			paused = false;
+			canPress = false;
+			entities.remove(pauseEntity);
+		}
+		
+		if (paused && pauseTick != tick)	return;
+		
+		tick++;
+		
+		// Update entities
 		for (e in entities) {
 			e.update();
 		}
@@ -88,7 +121,10 @@ class Game extends Sprite
 		// Clean up dead entities
 		entities = entities.filter(filterDead);
 		
-		// Update
+		// Update wave
+		WaveMan.update();
+		
+		// Update particles
 		for (p in particles) {
 			p.update();
 		}
@@ -110,11 +146,9 @@ class Game extends Sprite
 		}
 	}
 	
-	function filterDead (e:Entity) :Bool
+	public function filterDead (e:Entity) :Bool
 	{
-		var b = e.isDead;
-		if (b)	e = null;
-		return !b;
+		return !e.isDead;
 	}
 	
 	function checkCollisions ()
@@ -219,8 +253,8 @@ class Game extends Sprite
 				for (i in 0...amount)
 				{
 					var p = new Particle(t);
-					p.x = px + (Std.random(2) * 2 - 1) * Std.random(8);
-					p.y = py + (Std.random(2) * 2 - 1) * Std.random(8);
+					p.x = px + (Std.random(2) * 2 - 1) * (Std.random(8) + 4);
+					p.y = py + (Std.random(2) * 2 - 1) * (Std.random(8) + 4);
 					particles.push(p);
 				}
 		}

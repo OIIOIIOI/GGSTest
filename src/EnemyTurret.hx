@@ -15,7 +15,6 @@ class EnemyTurret extends MovingEntity
 	{
 		super();
 		setAnim(Sprites.ENEMY_A_SHIP);
-		frame = Std.random(totalFrames - 1) + 1;
 		
 		collRadius = 20;
 		collType = CollType.ENEMY;
@@ -36,7 +35,7 @@ class EnemyTurret extends MovingEntity
 	{
 		super.update();
 		
-		if (frame == 0)
+		if (frame == 0 && !isOffScreen())
 		{
 			if (fireTick == 0)
 			{
@@ -101,11 +100,12 @@ class EnemyTurret extends MovingEntity
 		}
 		else
 		{
-			Game.INST.spawnParticles(ParticleType.ORANGE, x + cx, y + cy, 1);
+			Game.INST.spawnParticles(ParticleType.ORANGE, x + cx, y + cy, 4);
 			SoundMan.playOnce(SoundMan.HURT);
 			if (health == 1) {
-				setAnim(Sprites.ENEMY_A_SHIP_HURT);
-				frame = 1;
+				var f = frame;
+				setAnim(Sprites.ENEMY_A_SHIP_HURT, false, true);
+				frame = f;
 			}
 		}
 	}

@@ -31,28 +31,28 @@ class UI {
 		container = new Sprite();
 		
 		font = Assets.getFont("fnt/upheavtt.ttf");
-		formatLeft = new TextFormat(font.fontName, 30, 0x53777A);
+		formatLeft = new TextFormat(font.fontName, 26, 0x53777A);
 		formatLeft.align = TextFormatAlign.LEFT;
-		formatRight = new TextFormat(font.fontName, 30, 0x53777A);
+		formatRight = new TextFormat(font.fontName, 26, 0x53777A);
 		formatRight.align = TextFormatAlign.RIGHT;
 		
 		scoreTitleTF = setupTF(new TextField(), formatRight);
-		scoreTitleTF.text = "SCORE";
+		scoreTitleTF.text = "SPACE";
 		scoreTitleTF.x = Game.WIDTH - scoreTitleTF.width - 5;
-		scoreTitleTF.y = Game.HEIGHT - 53;
+		scoreTitleTF.y = Game.HEIGHT - 45;
 		
 		scoreTF = setupTF(new TextField(), formatRight);
-		scoreTF.text = "000000";
+		scoreTF.text = "TO SHOOT";
 		scoreTF.x = scoreTitleTF.x;
-		scoreTF.y = scoreTitleTF.y + 20;
+		scoreTF.y = scoreTitleTF.y + 16;
 		
 		waveTF = setupTF(new TextField(), formatLeft);
-		waveTF.text = "WAVE 1";
+		waveTF.text = "ARROWS";
 		waveTF.x = 5;
 		waveTF.y = scoreTitleTF.y;
 		
 		comboTF = setupTF(new TextField(), formatLeft);
-		comboTF.text = "NO CHAIN";
+		comboTF.text = "TO MOVE";
 		comboTF.x = waveTF.x;
 		comboTF.y = scoreTF.y;
 		
@@ -76,11 +76,23 @@ class UI {
 	
 	static public function refresh ()
 	{
-		scoreTF.text = addZeros(Game.INST.score);
-		if (Game.INST.chain == 0)
-			comboTF.text = "NO CHAIN";
+		if (WaveMan.waveIndex == 0)
+		{
+			scoreTitleTF.text = "SPACE";
+			scoreTF.text = "TO SHOOT";
+			waveTF.text = "ARROWS";
+			comboTF.text = "TO MOVE";
+		}
 		else
-			comboTF.text = Game.INST.chain + " CHAIN";
+		{
+			scoreTitleTF.text = "SCORE";
+			scoreTF.text = addZeros(Game.INST.score);
+			waveTF.text = "WAVE " + WaveMan.waveIndex;
+			if (Game.INST.chain == 0)
+				comboTF.text = "NO CHAIN";
+			else
+				comboTF.text = Game.INST.chain + "-CHAIN";
+		}
 	}
 	
 	static function addZeros (s:Int) :String

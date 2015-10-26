@@ -13,7 +13,8 @@ class Player extends MovingEntity
 {
 	var isFiring:Bool;
 	var fireRate:Int;
-	var fireTick:Int;
+	
+	var lastShot:Int;
 	
 	public function new ()
 	{
@@ -31,7 +32,7 @@ class Player extends MovingEntity
 		
 		isFiring = false;
 		fireRate = 10;
-		fireTick = 0;
+		lastShot = 0;
 		
 		currentMove = Move.CONTROLLED;
 		diesOffScreen = false;
@@ -52,7 +53,7 @@ class Player extends MovingEntity
 		
 		if (isFiring)
 		{
-			if (fireTick == 0)
+			if (Game.INST.tick - lastShot >= fireRate)
 			{
 				var b = new Bullet();
 				b.x = x + cx - b.cx;
@@ -63,27 +64,21 @@ class Player extends MovingEntity
 				Game.INST.shake(1, 3);
 				SoundMan.playOnce(SoundMan.PLAYER_SHOT);
 				
-				fireTick = fireRate;
+				lastShot = Game.INST.tick;
 			}
-			else
-				fireTick--;
 		}
-		else {
-			fireTick = 0;
-		}
-		
 	}
 	
 	override public function hurt (c:CollType)
 	{
-		if (c != CollType.POINTS)
+		if (c != CollType.POINTS && c != CollType.START)
 			super.hurt(c);
 		
 		if (health <= 0)
 		{
 			Game.INST.spawnParticles(ParticleType.YELLOW, x + cx, y + cy, 10);
 			Game.INST.shake(6, 60);
-			Game.INST.flashTick = 5;
+			Game.INST.flashTick = 10;
 			SoundMan.playOnce(SoundMan.PLAYER_DEATH);
 		}
 	}

@@ -19,6 +19,7 @@ class Controls {
 		keys.set(Keyboard.DOWN, false);
 		keys.set(Keyboard.LEFT, false);
 		keys.set(Keyboard.SPACE, false);
+		keys.set(Keyboard.ESCAPE, false);
 		
 		Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 		Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
