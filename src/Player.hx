@@ -31,7 +31,7 @@ class Player extends MovingEntity
 		yVelMax = 5;
 		
 		isFiring = false;
-		fireRate = 10;
+		fireRate = 15;
 		lastShot = 0;
 		
 		currentMove = Move.CONTROLLED;
@@ -51,7 +51,7 @@ class Player extends MovingEntity
 		// Player action
 		isFiring = Controls.isDown(Keyboard.SPACE);
 		
-		if (isFiring)
+		if (isFiring && !isDead)
 		{
 			if (Game.INST.tick - lastShot >= fireRate)
 			{
@@ -80,6 +80,7 @@ class Player extends MovingEntity
 			Game.INST.shake(6, 60);
 			Game.INST.flashTick = 10;
 			SoundMan.playOnce(SoundMan.PLAYER_DEATH);
+			Game.INST.gameOver();
 		}
 	}
 	

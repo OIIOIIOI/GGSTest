@@ -20,10 +20,12 @@ class Sprites
 	static public var POINTS:String = "points";
 	static public var START:String = "start";
 	static public var PAUSE:String = "pause";
+	static public var GAME_OVER:String = "game_over";
 	
 	static public var YELLOW_PART:String = "yellow_part";
 	static public var ORANGE_PART:String = "orange_part";
 	static public var YELLOW_BULLET_PART:String = "yellow_bullet_part";
+	static public var STAR_PART:String = "star_part";
 	
 	static var sprites:Map<String, SpriteSheet>;
 	
@@ -41,10 +43,12 @@ class Sprites
 		sprites.set(POINTS, { data:Assets.getBitmapData("img/points.png"), frames:4, delay:8 });
 		sprites.set(START, { data:Assets.getBitmapData("img/start.png"), frames:2, delay:4 });
 		sprites.set(PAUSE, { data:Assets.getBitmapData("img/paused.png"), frames:1, delay:0 });
+		sprites.set(GAME_OVER, { data:Assets.getBitmapData("img/gameover.png"), frames:1, delay:0 });
 		
 		sprites.set(YELLOW_PART, { data:Assets.getBitmapData("img/player_particles.png"), frames:4, delay:0 } );
 		sprites.set(ORANGE_PART, { data:Assets.getBitmapData("img/enemy_a_particles.png"), frames:4, delay:0 } );
 		sprites.set(YELLOW_BULLET_PART, { data:new BitmapData(3, 3, false, 0xFFECD078), frames:1, delay:0 } );
+		sprites.set(STAR_PART, { data:Assets.getBitmapData("img/star.png"), frames:2, delay:50 } );
 	}
 	
 	static public function getSheet (id:String) :SpriteSheet
@@ -84,9 +88,10 @@ typedef SpriteSheet = {
 /*
  * PALETTE:
  * 
- * Purple:	542437
- * Red:		C02942
- * Orange:	D95B43
- * Yellow:	ECD078
- * Blue:	53777A
+ * Purple:			542437
+ * Red:				C02942
+ * Orange:			D95B43
+ * Yellow:			ECD078
+ * Blue:			53777A
+ * Light Purple:	78334F
 */

@@ -12,7 +12,7 @@ class StartArea extends Entity {
 		super();
 		setAnim(Sprites.START);
 		
-		collRadius = 16;
+		collRadius = 20;
 		collType = CollType.START;
 		collList.push(CollType.PLAYER);
 	}

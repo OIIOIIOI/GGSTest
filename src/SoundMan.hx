@@ -28,6 +28,9 @@ class SoundMan {
 		if (snd == null)
 			return;
 		
+		if (Game.INST.isGameOver)
+			vol *= 0.25;
+		
 		if (vol == 1) {
 			snd.play();
 		}

@@ -32,6 +32,11 @@ class Particle extends MovingEntity {
 				totalFrames = 1;// Disable animation
 				xVel = (Std.random(2) * 2 - 1) * Std.random(100) / 100;
 				yVel = (Std.random(2) * 2 - 1) * Std.random(100) / 100;
+			case ParticleType.STAR:
+				lifetime = 999;
+				setAnim(Sprites.STAR_PART, true);
+				xVel = 0;
+				yVel = 2;
 		}
 	}
 	
@@ -50,4 +55,5 @@ enum ParticleType {
 	YELLOW_BULLET;
 	ORANGE;
 	YELLOW;
+	STAR;
 }

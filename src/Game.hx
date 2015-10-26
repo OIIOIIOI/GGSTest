@@ -31,9 +31,13 @@ class Game extends Sprite
 	
 	public var tick:Int = 0;
 	
-	public var paused:Bool = false;
-	var canPress:Bool = true;
+	public var isPaused:Bool = false;
 	var pauseEntity:Pause;
+	var canPressEscape:Bool = true;
+	
+	public var isGameOver:Bool = false;
+	var gameOverEntity:GameOver;
+	var canPressSpace:Bool = true;
 	
 	public var shakeOffset:Int = 10;
 	var shakeAmount:Int = 3;
@@ -73,13 +77,7 @@ class Game extends Sprite
 		entities = [];
 		particles = [];
 		
-		player = new Player();
-		player.x = WIDTH / 2 + canvas.x;
-		player.y = HEIGHT - canvas.y - 70;
-		entities.push(player);
-		
-		score = chain = 0;
-		WaveMan.spawnWave(0);
+		reset();
 		
 		addEventListener(Event.ENTER_FRAME, update);
 	}
@@ -87,30 +85,49 @@ class Game extends Sprite
 	function update (e:Event)
 	{
 		var pauseTick = 0;
-		if (!canPress && !Controls.isDown(Keyboard.ESCAPE)) {
-			canPress = true;
+		if (!canPressEscape && !Controls.isDown(Keyboard.ESCAPE)) {
+			canPressEscape = true;
+		}
+		if (!canPressSpace && !Controls.isDown(Keyboard.SPACE)) {
+			canPressSpace = true;
 		}
 		
-		if (canPress && !paused && Controls.isDown(Keyboard.ESCAPE)) {
-			paused = true;
-			canPress = false;
+		if (canPressEscape && !isPaused && Controls.isDown(Keyboard.ESCAPE) && WaveMan.waveIndex != 0 && !isGameOver) {
+			isPaused = true;
+			canPressEscape = false;
 			pauseTick = tick;
 			if (pauseEntity == null) {
 				pauseEntity = new Pause();
 				pauseEntity.x = Game.WIDTH / 2 - pauseEntity.cx + Game.INST.shakeOffset;
 				pauseEntity.y = Game.HEIGHT / 2 - pauseEntity.cy + Game.INST.shakeOffset;
 			}
-			entities.push(pauseEntity);
+			pauseEntity.isDead = false;
+			addEntity(pauseEntity, false);
 		}
-		else if (canPress && paused && Controls.isDown(Keyboard.ESCAPE)) {
-			paused = false;
-			canPress = false;
+		else if (canPressEscape && isPaused && Controls.isDown(Keyboard.ESCAPE)) {
+			isPaused = false;
+			canPressEscape = false;
 			entities.remove(pauseEntity);
 		}
 		
-		if (paused && pauseTick != tick)	return;
+		if (isPaused && pauseTick != tick)
+			return;
+		
+		if (canPressSpace && isGameOver && Controls.isDown(Keyboard.SPACE)) {
+			Game.INST.flashTick = 3;
+			SoundMan.playOnce(SoundMan.START);
+			reset();
+		}
 		
 		tick++;
+		
+		// Star particles
+		if (tick % 10 == 0)
+		{
+			var p = new Particle(ParticleType.STAR);
+			p.x = Std.random(Game.WIDTH) + shakeOffset;
+			particles.push(p);
+		}
 		
 		// Update entities
 		for (e in entities) {
@@ -206,13 +223,13 @@ class Game extends Sprite
 		else
 		{
 			canvasData.fillRect(canvasData.rect, 0xFF542437);
-			// Render entities
-			for (e in entities) {
-				Sprites.draw(canvasData, e.spriteID, e.x, e.y, e.frame);
-			}
 			// Render particles
 			for (p in particles) {
 				Sprites.draw(canvasData, p.spriteID, p.x, p.y, p.frame);
+			}
+			// Render entities
+			for (e in entities) {
+				Sprites.draw(canvasData, e.spriteID, e.x, e.y, e.frame);
 			}
 		}
 		canvasData.draw(UI.container, uiMatrix);
@@ -235,6 +252,10 @@ class Game extends Sprite
 			entities.remove(player);
 			entities.push(player);
 		}
+		if (entities.remove(pauseEntity))
+			entities.push(pauseEntity);
+		if (entities.remove(gameOverEntity))
+			entities.push(gameOverEntity);
 	}
 	
 	public function spawnParticles (t:ParticleType, px:Float, py:Float, amount:Int)
@@ -257,6 +278,7 @@ class Game extends Sprite
 					p.y = py + (Std.random(2) * 2 - 1) * (Std.random(8) + 4);
 					particles.push(p);
 				}
+			default:
 		}
 	}
 	
@@ -264,6 +286,50 @@ class Game extends Sprite
 	{
 		score += s * chain;
 		UI.refresh();
+	}
+	
+	public function gameOver ()
+	{
+		isGameOver = true;
+		canPressSpace = false;
+		
+		if (gameOverEntity == null)
+		{
+			gameOverEntity = new GameOver();
+			gameOverEntity.x = Game.WIDTH / 2 - gameOverEntity.cx + Game.INST.shakeOffset;
+			gameOverEntity.y = Game.HEIGHT / 2 - gameOverEntity.cy + Game.INST.shakeOffset;
+		}
+		gameOverEntity.isDead = false;
+		addEntity(gameOverEntity);
+	}
+	
+	function reset ()
+	{
+		for (e in entities) {
+			e.isDead = true;
+		}
+		for (p in particles) {
+			p.isDead = true;
+		}
+		entities = [];
+		particles = [];
+		
+		for (i in 0...30) {
+			var p = new Particle(ParticleType.STAR);
+			p.x = Std.random(Game.WIDTH) + shakeOffset;
+			p.y = Std.random(Game.HEIGHT) + shakeOffset;
+			particles.push(p);
+		}
+		
+		player = new Player();
+		player.x = WIDTH / 2 + canvas.x;
+		player.y = HEIGHT - canvas.y - 70;
+		addEntity(player);
+		
+		score = chain = 0;
+		WaveMan.spawnWave(0);
+		
+		isGameOver = false;
 	}
 	
 }
