@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>GGS Shooter</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="style.min.css" />
+</head>
+<body>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	<script src="jquery.swfobject.1-1-1.min.js"></script>
+	<script>
+		swf = $.flash.create({
+			swf:'GGSTest.swf',
+			width:400,
+			height:600
+		});
+		$(document).ready(function () {
+			$('#game').html(swf);
+		});
+	</script>
+	
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 text-center">
+				<div id="game"></div>
+			</div>
+			<div class="col-md-6">
+				<h2>GGS Test</h2>
+				<p>
+					ARROWS to move
+					<br/>SPACE to shoot
+					<br/>ESC to pause/resume
+				</p>
+				<p>
+					Click once on the game to give it the focus.
+				</p>
+				<ul>
+					<li>
+						<a class="btn btn-warning" href="https://github.com/OIIOIIOI/GGSTest">
+							<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Source code
+						</a>
+					</li>
+					<li>
+						<a class="btn btn-warning" href="http://01101101.fr">
+							<span class="glyphicon glyphicon-th-large" aria-hidden="true"></span> Portfolio
+						</a>
+					</li>
+				</ul>
+				
+			</div>
+		</div>
+	</div>
+</body>
+</html>
