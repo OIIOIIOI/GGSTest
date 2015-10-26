@@ -19,14 +19,15 @@ class Player extends MovingEntity
 	{
 		super();
 		setAnim(Sprites.PLAYER_SHIP);
+		cy += 3;
 		
 		collRadius = 15;
 		collType = CollType.PLAYER;
 		collList.push(CollType.ENEMY);
 		
 		friction = 0.9;
-		xVelMax = 6;
-		yVelMax = 6;
+		xVelMax = 5;
+		yVelMax = 5;
 		
 		isFiring = false;
 		fireRate = 10;
@@ -73,14 +74,16 @@ class Player extends MovingEntity
 		
 	}
 	
-	override public function hurt ()
+	override public function hurt (c:CollType)
 	{
-		super.hurt();
+		if (c != CollType.POINTS)
+			super.hurt(c);
 		
 		if (health <= 0)
 		{
 			Game.INST.spawnParticles(ParticleType.YELLOW, x + cx, y + cy, 10);
 			Game.INST.shake(6, 60);
+			Game.INST.flashTick = 5;
 			SoundMan.playOnce(SoundMan.PLAYER_DEATH);
 		}
 	}

@@ -77,7 +77,7 @@ class Entity
 		}
 	}
 	
-	public function hurt ()
+	public function hurt (c:CollType)
 	{
 		if (isIndestructible)
 			return;
@@ -85,6 +85,11 @@ class Entity
 		health--;
 		if (health <= 0)
 			isDead = true;
+	}
+	
+	public function isOffScreen () :Bool
+	{
+		return (x + 2 * cx < 0 || x > Game.WIDTH || y + 2 * cy < 0 || y > Game.HEIGHT);
 	}
 	
 }
@@ -95,4 +100,5 @@ enum CollType
 	ENEMY;
 	PLAYER_BULLET;
 	ENEMY_BULLET;
+	POINTS;
 }

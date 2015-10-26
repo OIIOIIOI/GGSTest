@@ -47,10 +47,16 @@ class MovingEntity extends Entity
 			yVel = 0;
 		y += yVel;
 		
-		if (diesOffScreen && (x + cx < -100 || x + cx > Game.WIDTH + 100 || y + cy < -100 || y + cy > Game.HEIGHT + 100)) {
+		if (diesOffScreen && isOffScreen()) {
+			diedOffScreen();
 			isDead = true;
 		}
+		else if (!diesOffScreen && !isOffScreen()) {
+			diesOffScreen = true;
+		}
 	}
+	
+	function diedOffScreen () { }
 	
 	function move ()
 	{

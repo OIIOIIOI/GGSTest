@@ -6,6 +6,7 @@ import openfl.display.BitmapData;
 import openfl.display.Sprite;
 import openfl.errors.Error;
 import openfl.events.Event;
+import openfl.geom.Matrix;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
 import openfl.Lib;
@@ -27,17 +28,23 @@ class Game extends Sprite
 	
 	static public var INST:Game;
 	
-	var shakeOffset:Int = 10;
+	public var shakeOffset:Int = 10;
 	var shakeAmount:Int = 3;
-	var shakeTick:Int;
+	var shakeTick:Int = 0;
+	
+	public var flashTick:Int = 0;
 	
 	var canvas:Bitmap;
 	var canvasData:BitmapData;
+	var uiMatrix:Matrix;
 	
 	var entities:Array<Entity>;
 	var particles:Array<Particle>;
 	
 	public var player:Player;
+	
+	public var score:Int;
+	public var chain:Int;
 	
 	public function new ()
 	{
@@ -53,32 +60,19 @@ class Game extends Sprite
 		canvas.x = canvas.y = -shakeOffset;
 		addChild(canvas);
 		
+		uiMatrix = new Matrix();
+		uiMatrix.translate(shakeOffset, shakeOffset);
+		
 		entities = [];
 		particles = [];
-		
-		/*for (i in 0...3) {
-			var e = new Asteroid();
-			e.x = WIDTH / 4 + WIDTH / 4 * i;
-			e.y = -i * 80;
-			entities.push(e);
-		}*/
-		for (i in 0...3) {
-			var e = new EnemyCharger();
-			e.x = WIDTH / 2 - e.cx;
-			e.y = -i * 50;
-			entities.push(e);
-		}
-		for (i in 0...3) {
-			var e = new EnemyTurret();
-			e.x = Std.random(WIDTH - e.cx * 2);
-			e.y = Std.random(Std.int(HEIGHT / 3));
-			entities.push(e);
-		}
 		
 		player = new Player();
 		player.x = WIDTH / 2 + canvas.x;
 		player.y = HEIGHT - canvas.y - 70;
 		entities.push(player);
+		
+		score = chain = 0;
+		WaveMan.spawnWave(0);
 		
 		addEventListener(Event.ENTER_FRAME, update);
 	}
@@ -129,14 +123,14 @@ class Game extends Sprite
 		{
 			var ea = entities[i];
 			// Skip entity if dead
-			if (ea.isDead)
+			if (ea.isDead || ea.isOffScreen())
 				continue;
 			
 			for (j in i + 1...entities.length) 
 			{
 				var eb = entities[j];
 				// Skip entity if dead
-				if (eb.isDead)
+				if (eb.isDead || eb.isOffScreen())
 					continue;
 				// Skip check if entities are not supposed to collide
 				if (ea.collList.indexOf(eb.collType) == -1)
@@ -148,7 +142,7 @@ class Game extends Sprite
 		}
 	}
 	
-	function getDistance (ea:Entity, eb:Entity) :Float
+	public function getDistance (ea:Entity, eb:Entity) :Float
 	{
 		var dx = (eb.x + eb.cx) - (ea.x + ea.cx);
 		var dy = (eb.y + eb.cy) - (ea.y + ea.cy);
@@ -158,28 +152,36 @@ class Game extends Sprite
 	function resolveCollision (ea:Entity, eb:Entity)
 	{
 		if (!ea.isIndestructible)
-			ea.hurt();
+			ea.hurt(eb.collType);
 		else if (eb.collType == CollType.PLAYER_BULLET)
 			SoundMan.playOnce(SoundMan.INDESTRUCTIBLE);
 		
 		if (!eb.isIndestructible)
-			eb.hurt();
+			eb.hurt(ea.collType);
 		else if (ea.collType == CollType.PLAYER_BULLET)
 			SoundMan.playOnce(SoundMan.INDESTRUCTIBLE);
 	}
 	
 	function render ()
 	{
-		canvasData.fillRect(canvasData.rect, 0xFF542437);
-		
-		// Render entities
-		for (e in entities) {
-			Sprites.draw(canvasData, e.spriteID, e.x, e.y, e.frame);
+		if (flashTick > 0)
+		{
+			canvasData.fillRect(canvasData.rect, 0xFFFFFF);
+			flashTick--;
 		}
-		// Render particles
-		for (p in particles) {
-			Sprites.draw(canvasData, p.spriteID, p.x, p.y, p.frame);
+		else
+		{
+			canvasData.fillRect(canvasData.rect, 0xFF542437);
+			// Render entities
+			for (e in entities) {
+				Sprites.draw(canvasData, e.spriteID, e.x, e.y, e.frame);
+			}
+			// Render particles
+			for (p in particles) {
+				Sprites.draw(canvasData, p.spriteID, p.x, p.y, p.frame);
+			}
 		}
+		canvasData.draw(UI.container, uiMatrix);
 	}
 	
 	public function shake (amount:Int, duration:Int)
@@ -222,6 +224,12 @@ class Game extends Sprite
 					particles.push(p);
 				}
 		}
+	}
+	
+	public function addScore (s:Int)
+	{
+		score += s * chain;
+		UI.refresh();
 	}
 	
 }

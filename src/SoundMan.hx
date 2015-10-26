@@ -1,5 +1,6 @@
 package;
 import openfl.Assets;
+import openfl.media.SoundTransform;
 
 /**
  * ...
@@ -13,6 +14,7 @@ class SoundMan {
 	static public var INDESTRUCTIBLE:String = "snd/indestructible";
 	static public var HURT:String = "snd/hurt";
 	static public var TURRET_SHOT:String = "snd/turretshoot";
+	static public var POINTS:String = "snd/points";
 	
 	#if html5
 	static var ext:String = ".ogg";
@@ -20,12 +22,22 @@ class SoundMan {
 	static var ext:String = ".mp3";
 	#end
 	
-	static public function playOnce (s:String)
+	static public function playOnce (s:String, vol:Float = 1)
 	{
+		// Choose variant if needed
+		if (s == POINTS)	s = s + "" + Std.random(3);
+		// Play sound
 		var snd = Assets.getSound(s + ext);
 		if (snd == null)
 			return;
-		snd.play();
+		
+		if (vol == 1) {
+			snd.play();
+		}
+		else {
+			var st = new SoundTransform(vol);
+			snd.play(0, 0, st);
+		}
 	}
 	
 }

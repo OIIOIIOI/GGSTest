@@ -17,6 +17,7 @@ class Sprites
 	static public var ENEMY_A_SHIP_HURT:String = "enemy_a_ship_hurt";
 	static public var ENEMY_CHARGER:String = "enemy_charger";
 	static public var ENEMY_A_BULLET:String = "enemy_a_bullet";
+	static public var POINTS:String = "points";
 	
 	static public var YELLOW_PART:String = "yellow_part";
 	static public var ORANGE_PART:String = "orange_part";
@@ -35,6 +36,7 @@ class Sprites
 		sprites.set(ENEMY_A_SHIP_HURT, { data:Assets.getBitmapData("img/enemy_a_hurt.png"), frames:5, delay:15 });
 		sprites.set(ENEMY_CHARGER, { data:Assets.getBitmapData("img/enemy_b.png"), frames:1, delay:0 });
 		sprites.set(ENEMY_A_BULLET, { data:Assets.getBitmapData("img/enemy_a_bullet.png"), frames:1, delay:0 });
+		sprites.set(POINTS, { data:Assets.getBitmapData("img/points.png"), frames:4, delay:8 });
 		
 		sprites.set(YELLOW_PART, { data:Assets.getBitmapData("img/player_particles.png"), frames:4, delay:0 } );
 		sprites.set(ORANGE_PART, { data:Assets.getBitmapData("img/enemy_a_particles.png"), frames:4, delay:0 } );

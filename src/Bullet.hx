@@ -25,9 +25,9 @@ class Bullet extends MovingEntity
 		yVel = -yVelMax;
 	}
 	
-	override public function hurt ()
+	override public function hurt (c:CollType)
 	{
-		super.hurt();
+		super.hurt(c);
 		
 		if (health <= 0)
 		{

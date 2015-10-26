@@ -14,6 +14,7 @@ class Main extends Sprite
 	{
 		super();
 		
+		UI.init();
 		Sprites.init();
 		Controls.init();
 		

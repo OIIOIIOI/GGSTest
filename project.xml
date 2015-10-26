@@ -22,6 +22,7 @@
 	<!-- assets -->
 	<icon path="assets/openfl.svg" />
 	<assets path="assets/img" rename="img" />
+	<assets path="assets/fnt" rename="fnt" />
 	<assets path="assets/snd" rename="snd" include="*.mp3" unless="html5" />
 	<assets path="assets/snd" rename="snd" include="*.ogg" if="html5" />
 	
