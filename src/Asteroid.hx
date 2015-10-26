@@ -19,6 +19,9 @@ class Asteroid extends MovingEntity
 		collList.push(CollType.PLAYER);
 		collList.push(CollType.PLAYER_BULLET);
 		
+		xVelMax = yVelMax = 2;
+		yVel = 1;
+		
 		isIndestructible = true;
 		diesOffScreen = false;
 	}

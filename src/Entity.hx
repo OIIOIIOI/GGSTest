@@ -25,7 +25,7 @@ class Entity
 	public var collList:Array<CollType>;
 	
 	public var isIndestructible:Bool;
-	
+	public var health:Int;
 	public var isDead:Bool;
 	
 	public function new ()
@@ -35,7 +35,9 @@ class Entity
 		x = y = 0;
 		collRadius = 0;
 		collList = [];
+		
 		isIndestructible = false;
+		health = 1;
 		isDead = false;
 	}
 	
@@ -75,6 +77,16 @@ class Entity
 		}
 	}
 	
+	public function hurt ()
+	{
+		if (isIndestructible)
+			return;
+		
+		health--;
+		if (health <= 0)
+			isDead = true;
+	}
+	
 }
 
 enum CollType
@@ -82,4 +94,5 @@ enum CollType
 	PLAYER;
 	ENEMY;
 	PLAYER_BULLET;
+	ENEMY_BULLET;
 }

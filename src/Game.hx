@@ -56,24 +56,24 @@ class Game extends Sprite
 		entities = [];
 		particles = [];
 		
-		for (i in 0...3) {
-			var e = new Asteroid();
-			e.x = Std.random(WIDTH - e.cx * 2);
-			e.y = Std.random(Std.int(HEIGHT / 3));
-			entities.push(e);
-		}
-		for (i in 0...3) {
-			var e = new EnemyCharger();
-			e.x = WIDTH / 2;
-			e.y = 15 + i * 50;
-			entities.push(e);
-		}
 		/*for (i in 0...3) {
-			var e = new Enemy();
-			e.x = Std.random(WIDTH - e.cx * 2);
-			e.y = Std.random(Std.int(HEIGHT / 3));
+			var e = new Asteroid();
+			e.x = WIDTH / 4 + WIDTH / 4 * i;
+			e.y = -i * 80;
 			entities.push(e);
 		}*/
+		for (i in 0...3) {
+			var e = new EnemyCharger();
+			e.x = WIDTH / 2 - e.cx;
+			e.y = -i * 50;
+			entities.push(e);
+		}
+		for (i in 0...3) {
+			var e = new EnemyTurret();
+			e.x = Std.random(WIDTH - e.cx * 2);
+			e.y = Std.random(Std.int(HEIGHT / 3));
+			entities.push(e);
+		}
 		
 		player = new Player();
 		player.x = WIDTH / 2 + canvas.x;
@@ -158,40 +158,14 @@ class Game extends Sprite
 	function resolveCollision (ea:Entity, eb:Entity)
 	{
 		if (!ea.isIndestructible)
-			die(ea);
+			ea.hurt();
 		else if (eb.collType == CollType.PLAYER_BULLET)
 			SoundMan.playOnce(SoundMan.INDESTRUCTIBLE);
 		
 		if (!eb.isIndestructible)
-			die(eb);
+			eb.hurt();
 		else if (ea.collType == CollType.PLAYER_BULLET)
 			SoundMan.playOnce(SoundMan.INDESTRUCTIBLE);
-	}
-	
-	function die (e:Entity)
-	{
-		e.isDead = true;
-		
-		if (e.collType == CollType.ENEMY) {
-			shake(3, 6);
-			SoundMan.playOnce(SoundMan.ENEMY_DEATH);
-		}
-		else if (e.collType == CollType.PLAYER) {
-			shake(6, 60);
-			SoundMan.playOnce(SoundMan.ENEMY_DEATH);
-		}
-		
-		switch (e.spriteID)
-		{
-			case Sprites.PLAYER_SHIP:
-				spawnParticles(ParticleType.PLAYER, e.x + e.cx, e.y + e.cy, 10);
-			case Sprites.PLAYER_BULLET:
-				spawnParticles(ParticleType.PLAYER_BULLET, e.x + e.cx, e.y + e.cy, 15);
-			case Sprites.ENEMY_A_SHIP:
-				spawnParticles(ParticleType.ENEMY_A, e.x + e.cx, e.y + e.cy, 8);
-			case Sprites.ENEMY_CHARGER:
-				spawnParticles(ParticleType.ENEMY_A, e.x + e.cx, e.y + e.cy, 3);
-		}
 	}
 	
 	function render ()
@@ -217,25 +191,21 @@ class Game extends Sprite
 		}
 	}
 	
-	public function spawnBullet ()
+	public function addEntity (e:Entity, playerOnTop:Bool = true)
 	{
-		var b = new Bullet();
-		b.x = player.x + 18;
-		b.y = player.y - 16;
-		entities.push(b);
-		entities.remove(player);
-		entities.push(player);
+		entities.push(e);
 		
-		shake(1, 3);
-		
-		SoundMan.playOnce(SoundMan.PLAYER_SHOT);
+		if (playerOnTop) {
+			entities.remove(player);
+			entities.push(player);
+		}
 	}
 	
 	public function spawnParticles (t:ParticleType, px:Float, py:Float, amount:Int)
 	{
 		switch (t)
 		{
-			case ParticleType.PLAYER_BULLET:
+			case ParticleType.YELLOW_BULLET:
 				for (i in 0...amount)
 				{
 					var p = new Particle(t);
@@ -243,7 +213,7 @@ class Game extends Sprite
 					p.y = py;
 					particles.push(p);
 				}
-			case ParticleType.ENEMY_A, ParticleType.PLAYER:
+			case ParticleType.ORANGE, ParticleType.YELLOW:
 				for (i in 0...amount)
 				{
 					var p = new Particle(t);

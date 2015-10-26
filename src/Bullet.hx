@@ -1,6 +1,7 @@
 package;
 
 import Entity;
+import Particle;
 
 /**
  * ...
@@ -22,6 +23,16 @@ class Bullet extends MovingEntity
 		xVelMax = 0;
 		yVelMax = 30;
 		yVel = -yVelMax;
+	}
+	
+	override public function hurt ()
+	{
+		super.hurt();
+		
+		if (health <= 0)
+		{
+			Game.INST.spawnParticles(ParticleType.YELLOW_BULLET, x + cx, y + cy, 15);
+		}
 	}
 	
 }

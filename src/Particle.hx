@@ -13,21 +13,21 @@ class Particle extends MovingEntity {
 		
 		switch (t)
 		{
-			case ParticleType.PLAYER_BULLET:
+			case ParticleType.YELLOW_BULLET:
 				lifetime = 20 + Std.random(10);
-				setAnim(Sprites.PLAYER_BULLET_PART);
+				setAnim(Sprites.YELLOW_BULLET_PART);
 				xVel = (Std.random(2) * 2 - 1) * Std.random(300) / 100;
 				yVel = Std.random(600) / 100;
-			case ParticleType.ENEMY_A:
+			case ParticleType.ORANGE:
 				lifetime = 60 + Std.random(40);
-				setAnim(Sprites.ENEMY_A_PART);
+				setAnim(Sprites.ORANGE_PART);
 				frame = Std.random(totalFrames);// Pick a random frame
 				totalFrames = 1;// Disable animation
 				xVel = (Std.random(2) * 2 - 1) * Std.random(100) / 100;
 				yVel = (Std.random(2) * 2 - 1) * Std.random(100) / 100;
-			case ParticleType.PLAYER:
+			case ParticleType.YELLOW:
 				lifetime = 60 + Std.random(40);
-				setAnim(Sprites.PLAYER_PART);
+				setAnim(Sprites.YELLOW_PART);
 				frame = Std.random(totalFrames);// Pick a random frame
 				totalFrames = 1;// Disable animation
 				xVel = (Std.random(2) * 2 - 1) * Std.random(100) / 100;
@@ -47,7 +47,7 @@ class Particle extends MovingEntity {
 }
 
 enum ParticleType {
-	PLAYER_BULLET;
-	ENEMY_A;
-	PLAYER;
+	YELLOW_BULLET;
+	ORANGE;
+	YELLOW;
 }

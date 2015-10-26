@@ -3,6 +3,7 @@ package;
 import Entity;
 import MovingEntity;
 import openfl.ui.Keyboard;
+import Particle;
 
 /**
  * ...
@@ -48,9 +49,19 @@ class Player extends MovingEntity
 		// Player action
 		isFiring = Controls.isDown(Keyboard.SPACE);
 		
-		if (isFiring) {
-			if (fireTick == 0) {
-				Game.INST.spawnBullet();
+		if (isFiring)
+		{
+			if (fireTick == 0)
+			{
+				var b = new Bullet();
+				b.x = x + cx - b.cx;
+				b.y = y - 16;
+				
+				Game.INST.addEntity(b);
+				
+				Game.INST.shake(1, 3);
+				SoundMan.playOnce(SoundMan.PLAYER_SHOT);
+				
 				fireTick = fireRate;
 			}
 			else
@@ -60,6 +71,18 @@ class Player extends MovingEntity
 			fireTick = 0;
 		}
 		
+	}
+	
+	override public function hurt ()
+	{
+		super.hurt();
+		
+		if (health <= 0)
+		{
+			Game.INST.spawnParticles(ParticleType.YELLOW, x + cx, y + cy, 10);
+			Game.INST.shake(6, 60);
+			SoundMan.playOnce(SoundMan.PLAYER_DEATH);
+		}
 	}
 	
 }
