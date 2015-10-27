@@ -1,4 +1,4 @@
 # GGSTest
 
-Play it here (WIP):  
+Play it here:  
 http://01101101.fr/ggs/

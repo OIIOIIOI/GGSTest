@@ -4,7 +4,7 @@ body
 	background-color: #261019;
 	color: #53777a;
 }
-h1, h2, h3
+h1, h2, h3, h4, .yellow, a, a:hover
 {
 	color: #ecd078;
 }
