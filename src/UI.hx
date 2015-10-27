@@ -33,7 +33,7 @@ class UI {
 	static public function init ()
 	{
 		container = new Sprite();
-		
+		// Font and text formats
 		font = Assets.getFont("fnt/upheavtt.ttf");
 		formatLeft = new TextFormat(font.fontName, 26, 0x53777A);
 		formatLeft.align = TextFormatAlign.LEFT;
@@ -42,6 +42,7 @@ class UI {
 		formatCenter = new TextFormat(font.fontName, 26, 0x53777A);
 		formatCenter.align = TextFormatAlign.CENTER;
 		
+		// Textfields
 		bestTitleTF = setupTF(new TextField(), formatCenter);
 		bestTitleTF.text = "BEST SCORE";
 		bestTitleTF.x = Std.int((Game.WIDTH - bestTitleTF.width) / 2);
@@ -94,6 +95,7 @@ class UI {
 	
 	static public function refresh ()
 	{
+		// If in Start area
 		if (WaveMan.waveIndex == 0)
 		{
 			scoreTitleTF.text = "SPACE";
@@ -101,7 +103,7 @@ class UI {
 			waveTF.text = "ARROWS";
 			comboTF.text = "TO MOVE";
 			bestTF.text = addZeros(Game.INST.bestScore);
-			
+			// Add best score textfields if needed
 			if (!container.contains(bestTitleTF))
 				container.addChild(bestTitleTF);
 			if (!container.contains(bestTF))
@@ -116,7 +118,7 @@ class UI {
 				comboTF.text = "NO CHAIN";
 			else
 				comboTF.text = Game.INST.chain + "-CHAIN";
-			
+			// Remove best score textfields if needed
 			if (container.contains(bestTitleTF))
 				container.removeChild(bestTitleTF);
 			if (container.contains(bestTF))

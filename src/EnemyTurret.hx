@@ -35,10 +35,13 @@ class EnemyTurret extends MovingEntity
 	{
 		super.update();
 		
+		// If is on screen and is time (animation frame 0)
 		if (frame == 0 && !isOffScreen())
 		{
+			// If fire delay has passed
 			if (fireTick == 0)
 			{
+				// Create the bullets
 				for (i in 0...4)
 				{
 					var b = new EnemyBullet();
@@ -84,6 +87,7 @@ class EnemyTurret extends MovingEntity
 		
 		if (health <= 0)
 		{
+			// Explode and shake
 			Game.INST.spawnParticles(ParticleType.YELLOW, x + cx, y + cy, 8);
 			Game.INST.shake(3, 6);
 			SoundMan.playOnce(SoundMan.ENEMY_DEATH);
@@ -100,6 +104,7 @@ class EnemyTurret extends MovingEntity
 		}
 		else
 		{
+			// Throw a few particles and change sprite
 			Game.INST.spawnParticles(ParticleType.ORANGE, x + cx, y + cy, 4);
 			SoundMan.playOnce(SoundMan.HURT);
 			if (health == 1) {
@@ -113,6 +118,7 @@ class EnemyTurret extends MovingEntity
 	override function diedOffScreen ()
 	{
 		super.diedOffScreen();
+		// Break chain (enemy got out)
 		Game.INST.chain = 0;
 		UI.refresh();
 	}

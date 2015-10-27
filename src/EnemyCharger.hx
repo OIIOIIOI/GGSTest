@@ -10,7 +10,7 @@ import Particle;
  */
 class EnemyCharger extends MovingEntity
 {
-	
+	// "Hard" variant (orange 2 health)
 	var hard:Bool;
 	
 	public function new (h:Bool = false)
@@ -42,6 +42,7 @@ class EnemyCharger extends MovingEntity
 		
 		if (health <= 0)
 		{
+			// Explode and shake
 			Game.INST.spawnParticles(ParticleType.YELLOW, x + cx, y + cy, 3);
 			Game.INST.shake(3, 6);
 			SoundMan.playOnce(SoundMan.ENEMY_DEATH);
@@ -61,6 +62,7 @@ class EnemyCharger extends MovingEntity
 		}
 		else
 		{
+			// Throw a few particles and change sprite
 			Game.INST.spawnParticles(ParticleType.ORANGE, x + cx, y + cy, 2);
 			SoundMan.playOnce(SoundMan.HURT);
 			if (health == 1)
@@ -71,6 +73,7 @@ class EnemyCharger extends MovingEntity
 	override function diedOffScreen ()
 	{
 		super.diedOffScreen();
+		// Break chain (enemy got out)
 		Game.INST.chain = 0;
 		UI.refresh();
 	}

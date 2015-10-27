@@ -29,9 +29,9 @@ class Game extends Sprite
 	static public var WIDTH:Int = Lib.current.stage.stageWidth;
 	static public var HEIGHT:Int = Lib.current.stage.stageHeight;
 	
-	static public var INST:Game;
+	static public var INST:Game;// Game instance for external access
 	
-	public var tick:Int = 0;
+	public var tick:Int = 0;// Global game tick
 	
 	public var isPaused:Bool = false;
 	var pauseEntity:Pause;
@@ -48,19 +48,19 @@ class Game extends Sprite
 	public var flashTick:Int = 0;
 	
 	var canvas:Bitmap;
-	var canvasData:BitmapData;
+	var canvasData:BitmapData;// All graphics are drawn on this
 	var uiMatrix:Matrix;
 	
-	var entities:Array<Entity>;
-	var particles:Array<Particle>;
+	var entities:Array<Entity>;// Active entities
+	var particles:Array<Particle>;// Active particles
 	
-	public var player:Player;
+	public var player:Player;// Player entity
 	
 	public var score:Int;
 	public var chain:Int;
 	public var speedMod:Float = 1;
 	
-	var so:SharedObject;
+	var so:SharedObject;// SharedObject to save and retrieve best score
 	public var bestScore:Int;
 	
 	public function new ()
@@ -72,16 +72,19 @@ class Game extends Sprite
 		
 		super();
 		
+		// Retrieve best score on local machine
 		so = SharedObject.getLocal("bestScore");
 		if (so.data.score == null)
 			so.data.score = 0;
 		bestScore = so.data.score;
 		
+		// Setup canvas
 		canvasData = new BitmapData(WIDTH + 2 * shakeOffset, HEIGHT + 2 * shakeOffset, false);
 		canvas = new Bitmap(canvasData);
 		canvas.x = canvas.y = -shakeOffset;
 		addChild(canvas);
 		
+		// Matrix used to offset the UI on top of the canvas
 		uiMatrix = new Matrix();
 		uiMatrix.translate(shakeOffset, shakeOffset);
 		
@@ -90,23 +93,22 @@ class Game extends Sprite
 		
 		reset();
 		
-		addEventListener(Event.ENTER_FRAME, update);
+		addEventListener(Event.ENTER_FRAME, update);// Start the main loop
 	}
 	
 	function update (e:Event)
 	{
 		var pauseTick = 0;
+		// Detect when escape was released
 		if (!canPressEscape && !Controls.isDown(Keyboard.ESCAPE)) {
 			canPressEscape = true;
 		}
-		/*if (!canPressSpace && !Controls.isDown(Keyboard.SPACE)) {
-			canPressSpace = true;
-		}*/
-		
+		// Pause/Resume logic
 		if (canPressEscape && !isPaused && Controls.isDown(Keyboard.ESCAPE) && WaveMan.waveIndex != 0 && !isGameOver) {
 			isPaused = true;
 			canPressEscape = false;
 			pauseTick = tick;
+			// Show pause "entity"
 			if (pauseEntity == null) {
 				pauseEntity = new Pause();
 				pauseEntity.x = Game.WIDTH / 2 - pauseEntity.cx + Game.INST.shakeOffset;
@@ -120,10 +122,11 @@ class Game extends Sprite
 			canPressEscape = false;
 			entities.remove(pauseEntity);
 		}
-		
+		// Stop main loop execution here if paused
 		if (isPaused && pauseTick != tick)
 			return;
 		
+		// Reset game if space was pressed while in game over state
 		if (canPressSpace && isGameOver && Controls.isDown(Keyboard.SPACE)) {
 			Game.INST.flashTick = 3;
 			SoundMan.playOnce(SoundMan.START);
@@ -132,7 +135,7 @@ class Game extends Sprite
 		
 		tick++;
 		
-		// Star particles
+		// Background star particles
 		if (tick % 10 == 0)
 		{
 			var p = new Particle(ParticleType.STAR);
@@ -181,6 +184,7 @@ class Game extends Sprite
 	
 	function checkCollisions ()
 	{
+		// Check every entity ONCE against every other
 		for (i in 0...entities.length)
 		{
 			var ea = entities[i];
@@ -226,11 +230,13 @@ class Game extends Sprite
 	
 	function render ()
 	{
+		// Render white flash if required
 		if (flashTick > 0)
 		{
 			canvasData.fillRect(canvasData.rect, 0xFFFFFF);
 			flashTick--;
 		}
+		// Render all graphics
 		else
 		{
 			canvasData.fillRect(canvasData.rect, 0xFF542437);
@@ -243,6 +249,7 @@ class Game extends Sprite
 				Sprites.draw(canvasData, e.spriteID, e.x, e.y, e.frame);
 			}
 		}
+		// Render UI
 		canvasData.draw(UI.container, uiMatrix);
 	}
 	
@@ -255,14 +262,16 @@ class Game extends Sprite
 		}
 	}
 	
+	// Add an entity to the update/render list
 	public function addEntity (e:Entity, playerOnTop:Bool = true)
 	{
 		entities.push(e);
-		
+		// Put the player back on top
 		if (playerOnTop) {
 			entities.remove(player);
 			entities.push(player);
 		}
+		// Put the pause/game over entities back on top
 		if (entities.remove(pauseEntity))
 			entities.push(pauseEntity);
 		if (entities.remove(gameOverEntity))
@@ -306,7 +315,7 @@ class Game extends Sprite
 	{
 		isGameOver = true;
 		canPressSpace = false;
-		
+		// Add game over "entity"
 		if (gameOverEntity == null)
 		{
 			gameOverEntity = new GameOver();
@@ -315,13 +324,12 @@ class Game extends Sprite
 		}
 		gameOverEntity.isDead = false;
 		addEntity(gameOverEntity);
-		
-		if (score > bestScore)
-		{
+		// Update best score if needed
+		if (score > bestScore) {
 			so.data.score = bestScore = score;
 			so.flush();
 		}
-		
+		// Add a delay before the user can go back to the Start screen
 		Timer.delay(allowReset, 2500);
 	}
 	
@@ -331,6 +339,7 @@ class Game extends Sprite
 	
 	function reset ()
 	{
+		// Kill all
 		for (e in entities) {
 			e.isDead = true;
 		}
@@ -339,23 +348,23 @@ class Game extends Sprite
 		}
 		entities = [];
 		particles = [];
-		
+		// Generate star background
 		for (i in 0...30) {
 			var p = new Particle(ParticleType.STAR);
 			p.x = Std.random(Game.WIDTH) + shakeOffset;
 			p.y = Std.random(Game.HEIGHT) + shakeOffset;
 			particles.push(p);
 		}
-		
+		// Create player
 		player = new Player();
 		player.x = WIDTH / 2 + canvas.x;
 		player.y = HEIGHT - canvas.y - 70;
 		addEntity(player);
-		
+		// Reset score
 		score = chain = 0;
 		speedMod = 1;
-		WaveMan.spawnWave(0);
-		
+		// Spawn first wave (Start area)
+		WaveMan.spawnWave(19);
 		isGameOver = false;
 	}
 	

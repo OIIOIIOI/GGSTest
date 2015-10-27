@@ -30,9 +30,7 @@ class Bullet extends MovingEntity
 		super.hurt(c);
 		
 		if (health <= 0)
-		{
 			Game.INST.spawnParticles(ParticleType.YELLOW_BULLET, x + cx, y + cy, 15);
-		}
 	}
 	
 }

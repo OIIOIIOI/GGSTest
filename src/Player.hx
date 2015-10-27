@@ -43,6 +43,7 @@ class Player extends MovingEntity
 		// MovingEntity update
 		super.update();
 		
+		// Restrict position to screen space
 		if (x < 10)	x = 10;
 		else if (x + 2 * cx - 10 > Game.WIDTH)	x = Game.WIDTH - 2 * cx + 10;
 		if (y + 2 * cy - 10 > Game.HEIGHT)	y = Game.HEIGHT - 2 * cy + 10;
@@ -50,22 +51,22 @@ class Player extends MovingEntity
 		
 		// Player action
 		isFiring = Controls.isDown(Keyboard.SPACE);
-		
 		if (isFiring && !isDead)
 		{
+			// If time to fire
 			if (Game.INST.tick - lastShot >= fireRate)
 			{
+				// Create and add bullet
 				var b = new Bullet();
 				b.x = x + cx - b.cx;
 				b.y = y - 16;
-				
 				Game.INST.addEntity(b);
-				
+				// Yes, firing costs a point
 				Game.INST.addScore(-1);
-				
+				// Smal shake and sound
 				Game.INST.shake(1, 3);
 				SoundMan.playOnce(SoundMan.PLAYER_SHOT);
-				
+				// Reset fire delay
 				lastShot = Game.INST.tick;
 			}
 		}
@@ -78,10 +79,13 @@ class Player extends MovingEntity
 		
 		if (health <= 0)
 		{
+			// Explode and ultra shake
 			Game.INST.spawnParticles(ParticleType.YELLOW, x + cx, y + cy, 10);
 			Game.INST.shake(6, 60);
+			// Flash
 			Game.INST.flashTick = 10;
 			SoundMan.playOnce(SoundMan.PLAYER_DEATH, 1.5);
+			// Game over
 			Game.INST.gameOver();
 		}
 	}

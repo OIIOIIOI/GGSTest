@@ -14,8 +14,10 @@ class WaveMan {
 		waveIndex = w;
 		currentWave = [];
 		
+		// Loop handling (player has completed all 10 waves once or more
 		if (w > 10) {
-			w -= 10;
+			w = ((w - 1) % 10) + 1;
+			// Speed goes up every loop
 			Game.INST.speedMod * Math.pow(1.5, Std.int((w - 1) / 10));
 		}
 		

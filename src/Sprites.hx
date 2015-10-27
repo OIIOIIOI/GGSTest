@@ -36,7 +36,7 @@ class Sprites
 	static public function init ()
 	{
 		sprites = new Map();
-		
+		// Store all assets and animation infos
 		sprites.set(PLAYER_SHIP, { data:Assets.getBitmapData("img/player.png"), frames:2, delay:3 });
 		sprites.set(PLAYER_BULLET, { data:Assets.getBitmapData("img/player_bullet.png"), frames:1, delay:0 });
 		sprites.set(MINE, { data:Assets.getBitmapData("img/asteroid.png"), frames:2, delay:10 });
@@ -52,7 +52,7 @@ class Sprites
 		sprites.set(START, { data:Assets.getBitmapData("img/start.png"), frames:2, delay:4 });
 		sprites.set(PAUSE, { data:Assets.getBitmapData("img/paused.png"), frames:1, delay:0 });
 		sprites.set(GAME_OVER, { data:Assets.getBitmapData("img/gameover.png"), frames:1, delay:0 });
-		
+		// Same for particles
 		sprites.set(YELLOW_PART, { data:Assets.getBitmapData("img/player_particles.png"), frames:4, delay:0 } );
 		sprites.set(ORANGE_PART, { data:Assets.getBitmapData("img/enemy_a_particles.png"), frames:4, delay:0 } );
 		sprites.set(YELLOW_BULLET_PART, { data:new BitmapData(3, 3, false, 0xFFECD078), frames:1, delay:0 } );
@@ -96,10 +96,10 @@ typedef SpriteSheet = {
 /*
  * PALETTE:
  * 
- * Purple:			542437
- * Red:				C02942
- * Orange:			D95B43
- * Yellow:			ECD078
- * Blue:			53777A
- * Light Purple:	78334F
+ * Purple:	542437
+ * Red:		C02942
+ * Orange:	D95B43
+ * Yellow:	ECD078
+ * Blue:	53777A
+ * Stars:	78334F
 */

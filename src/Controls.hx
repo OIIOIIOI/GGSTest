@@ -13,6 +13,7 @@ class Controls {
 	
 	static public function init ()
 	{
+		// Setup all useful keys
 		keys = new Map();
 		keys.set(Keyboard.UP, false);
 		keys.set(Keyboard.RIGHT, false);

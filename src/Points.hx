@@ -26,7 +26,7 @@ class Points extends MovingEntity {
 	override public function update ()
 	{
 		super.update();
-		
+		// If player is near, chase him
 		if (Game.INST.getDistance(Game.INST.player, this) < 150) {
 			friction = 1;
 			currentMove = Move.CHASER;
@@ -41,7 +41,7 @@ class Points extends MovingEntity {
 	{
 		super.hurt(c);
 		SoundMan.playOnce(SoundMan.POINTS, 0.25);
-		Game.INST.addScore(9);
+		Game.INST.addScore(11);
 	}
 	
 }

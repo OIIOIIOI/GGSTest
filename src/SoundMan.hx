@@ -23,17 +23,16 @@ class SoundMan {
 	{
 		// Choose variant if needed
 		if (s == POINTS)	s = s + "" + Std.random(3);
-		// Play sound
+		// Get sound
 		var snd = Assets.getSound(s + ext);
 		if (snd == null)
 			return;
-		
+		// Turn down the volume if game is over
 		if (Game.INST.isGameOver)
 			vol *= 0.25;
-		
-		if (vol == 1) {
+		// Play sound
+		if (vol == 1)
 			snd.play();
-		}
 		else {
 			var st = new SoundTransform(vol);
 			snd.play(0, 0, st);
