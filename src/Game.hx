@@ -1,6 +1,7 @@
 package;
 
 import Entity;
+import haxe.Timer;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.Sprite;
@@ -10,6 +11,7 @@ import openfl.geom.Matrix;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
 import openfl.Lib;
+import openfl.net.SharedObject;
 import openfl.ui.Keyboard;
 import Particle;
 
@@ -56,6 +58,10 @@ class Game extends Sprite
 	
 	public var score:Int;
 	public var chain:Int;
+	public var speedMod:Float = 1;
+	
+	var so:SharedObject;
+	public var bestScore:Int;
 	
 	public function new ()
 	{
@@ -65,6 +71,11 @@ class Game extends Sprite
 			INST = this;
 		
 		super();
+		
+		so = SharedObject.getLocal("bestScore");
+		if (so.data.score == null)
+			so.data.score = 0;
+		bestScore = so.data.score;
 		
 		canvasData = new BitmapData(WIDTH + 2 * shakeOffset, HEIGHT + 2 * shakeOffset, false);
 		canvas = new Bitmap(canvasData);
@@ -88,9 +99,9 @@ class Game extends Sprite
 		if (!canPressEscape && !Controls.isDown(Keyboard.ESCAPE)) {
 			canPressEscape = true;
 		}
-		if (!canPressSpace && !Controls.isDown(Keyboard.SPACE)) {
+		/*if (!canPressSpace && !Controls.isDown(Keyboard.SPACE)) {
 			canPressSpace = true;
-		}
+		}*/
 		
 		if (canPressEscape && !isPaused && Controls.isDown(Keyboard.ESCAPE) && WaveMan.waveIndex != 0 && !isGameOver) {
 			isPaused = true;
@@ -284,7 +295,10 @@ class Game extends Sprite
 	
 	public function addScore (s:Int)
 	{
-		score += s * chain;
+		if (s > 0)
+			score += s * chain;
+		else if (score > 0)
+			score += s;
 		UI.refresh();
 	}
 	
@@ -301,6 +315,18 @@ class Game extends Sprite
 		}
 		gameOverEntity.isDead = false;
 		addEntity(gameOverEntity);
+		
+		if (score > bestScore)
+		{
+			so.data.score = bestScore = score;
+			so.flush();
+		}
+		
+		Timer.delay(allowReset, 2500);
+	}
+	
+	function allowReset () {
+		canPressSpace = true;
 	}
 	
 	function reset ()
@@ -327,6 +353,7 @@ class Game extends Sprite
 		addEntity(player);
 		
 		score = chain = 0;
+		speedMod = 1;
 		WaveMan.spawnWave(0);
 		
 		isGameOver = false;

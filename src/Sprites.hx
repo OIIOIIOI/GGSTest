@@ -44,8 +44,8 @@ class Sprites
 		sprites.set(ENEMY_A_SHIP_HURT, { data:Assets.getBitmapData("img/enemy_a_hurt.png"), frames:5, delay:15 });
 		sprites.set(ENEMY_CHARGER, { data:Assets.getBitmapData("img/enemy_b.png"), frames:1, delay:0 });
 		sprites.set(ENEMY_CHARGER_B, { data:Assets.getBitmapData("img/enemy_c.png"), frames:1, delay:0 });
-		sprites.set(ENEMY_SNIPER, { data:Assets.getBitmapData("img/enemy_sniper.png"), frames:3, delay:20 });
-		sprites.set(ENEMY_SNIPER_HURT, { data:Assets.getBitmapData("img/enemy_sniper_hurt.png"), frames:3, delay:15 });
+		sprites.set(ENEMY_SNIPER, { data:Assets.getBitmapData("img/enemy_sniper.png"), frames:3, delay:25 });
+		sprites.set(ENEMY_SNIPER_HURT, { data:Assets.getBitmapData("img/enemy_sniper_hurt.png"), frames:3, delay:20 });
 		sprites.set(ENEMY_SNIPER_CORE, { data:Assets.getBitmapData("img/enemy_sniper_core.png"), frames:2, delay:20 });
 		sprites.set(ENEMY_A_BULLET, { data:Assets.getBitmapData("img/enemy_a_bullet.png"), frames:1, delay:0 });
 		sprites.set(POINTS, { data:Assets.getBitmapData("img/points.png"), frames:4, delay:8 });

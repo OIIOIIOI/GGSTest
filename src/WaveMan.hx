@@ -11,26 +11,87 @@ class WaveMan {
 	
 	static public function spawnWave (w:Int)
 	{
-		if (w > 3)	w = 1;
 		waveIndex = w;
 		currentWave = [];
 		
-		switch (waveIndex)
+		if (w > 10) {
+			w -= 10;
+			Game.INST.speedMod * Math.pow(1.5, Std.int((w - 1) / 10));
+		}
+		
+		switch (w)
 		{
 			case 0:
 				addStartArea();
 			case 1:
-				addDual(EnemyCharger, -100);
-				addCenter(EnemySniper, -50);
+				addRight(EnemyCharger, -100);
+				addLeft(EnemyCharger, -100);
+				addCenter(EnemyCharger, -250, [true]);
+				addRight(EnemyCharger, -400);
+				addLeft(EnemyCharger, -400);
 			case 2:
-				addCenter(EnemyCharger, -100);
-				addDual(EnemyCharger, -150, [true]);
-				addTriple(EnemyCharger, -200);
+				addDual(EnemyCharger, -100);
+				addDual(EnemyCharger, -300);
+				addDual(EnemyCharger, -500);
+				addRight(Asteroid, -100);
+				addLeft(Asteroid, -250);
+				addRight(Asteroid, -400);
+				addLeft(Asteroid, -550);
 			case 3:
-				addCenter(EnemyCharger, -100, [true]);
-				addDual(EnemyCharger, -150, [true]);
-				addTriple(EnemyCharger, -200);
-				addQuad(EnemyCharger, -250);
+				addQuad(EnemyCharger, -100);
+				addCenter(EnemyTurret, -150);
+				addLeft(EnemyCharger, -300);
+				addRight(EnemyCharger, -300);
+			case 4:
+				addLeft(Asteroid, -300);
+				addRight(Asteroid, -300);
+				addCenter(EnemySniper, -100);
+				addRight(EnemyCharger, -480);
+				addLeft(EnemyCharger, -480);
+				addRight(EnemyCharger, -580);
+				addLeft(EnemyCharger, -580);
+			case 5:
+				addLeft(EnemyTurret, -100);
+				addRight(EnemyTurret, -100);
+				addLeft(EnemyTurret, -350);
+				addRight(EnemyTurret, -350);
+				addLeft(EnemyTurret, -600);
+				addRight(EnemyTurret, -600);
+			case 6:
+				addCenter(EnemyCharger, -100);
+				addDual(EnemyCharger, -160);
+				addTriple(EnemyCharger, -220, [null, [true]]);
+				addQuad(EnemyCharger, -280, [[true], [true]]);
+				addCenter(EnemyCharger, -340);
+				addDual(EnemyCharger, -340);
+				addLeft(EnemyCharger, -340);
+				addRight(EnemyCharger, -340);
+			case 7:
+				addCenter(EnemySniper, -100);
+				addCenter(EnemySniper, -400);
+				addCenter(Asteroid, -250, [1]);
+				addLeft(EnemySniper, -250);
+				addRight(EnemySniper, -250);
+			case 8:
+				addCenter(Asteroid, -100, [1.7]);
+				addLeft(Asteroid, -100, [1.6]);
+				addRight(Asteroid, -100, [1.4]);
+				addDual(Asteroid, -100, [[1.5], [1.8]]);
+				addQuad(EnemyCharger, -350);
+				addQuad(EnemyCharger, -500, [[true], [true], [true], [true]]);
+			case 9:
+				addDual(EnemyTurret, -100);
+				addTriple(EnemySniper, -250);
+				addDual(Asteroid, -370, [[1], [1]]);
+				addCenter(EnemyCharger, -600);
+				addCenter(EnemyCharger, -700);
+				addCenter(EnemyCharger, -800);
+			case 10:
+				for (i in 0...9) {
+					addCenter(EnemyCharger, -60 * (i + 1), [i % 2 == 1]);
+					addLeft(EnemyCharger, -60 * (i + 1), [i % 4 == 0]);
+					addRight(EnemyCharger, -60 * (i + 1), [i % 4 == 0]);
+				}
 		}
 		
 		for (e in currentWave) {
@@ -53,8 +114,8 @@ class WaveMan {
 		// Filter dead entities
 		if (e.isDead)
 			return false;
-		// Filter indestructible entities that are more than 3/4 of the way out
-		else if (e.isIndestructible && e.y + e.cy > Game.HEIGHT / 4 * 3)
+		// Filter indestructible entities that are more than 2/3 of the way out
+		else if (e.isIndestructible && e.y + e.cy > Game.HEIGHT / 3 * 2)
 			return false;
 		else
 			return true;
@@ -95,41 +156,54 @@ class WaveMan {
 		currentWave.push(e);
 	}
 	
-	static function addDual (c:Class<Entity>, y:Int = 0, p:Array<Dynamic> = null)
+	static function addDual (c:Class<Entity>, y:Int = 0, p:Array<Array<Dynamic>> = null)
 	{
 		if (p == null)	p = [];
+		while (p.length < 2) {
+			p.push([]);
+		}
 		for (i in 0...2)
 		{
-			var e = Type.createInstance(c, p);
+			var pa = (p[i] != null) ? p[i] : [];
+			var e = Type.createInstance(c, pa);
 			e.x = Game.WIDTH / 3 * (i + 1) - e.cx + Game.INST.shakeOffset;
 			e.y = y;
 			currentWave.push(e);
 		}
 	}
 	
-	static function addTriple (c:Class<Entity>, y:Int = 0, p:Array<Dynamic> = null)
+	static function addTriple (c:Class<Entity>, y:Int = 0, p:Array<Array<Dynamic>> = null)
 	{
 		if (p == null)	p = [];
+		while (p.length < 3) {
+			p.push([]);
+		}
 		for (i in 0...3)
 		{
-			var e = Type.createInstance(c, p);
+			var pa = (p[i] != null) ? p[i] : [];
+			var e = Type.createInstance(c, pa);
 			e.x = Game.WIDTH / 4 * (i + 1) + 24 * (i - 1) - e.cx + Game.INST.shakeOffset;
 			e.y = y;
 			currentWave.push(e);
 		}
 	}
 	
-	static function addQuad (c:Class<Entity>, y:Int = 0, p:Array<Dynamic> = null)
+	static function addQuad (c:Class<Entity>, y:Int = 0, p:Array<Array<Dynamic>> = null)
 	{
 		if (p == null)	p = [];
+		while (p.length < 4) {
+			p.push([]);
+		}
 		for (i in 0...2)
 		{
-			var e = Type.createInstance(c, p);
+			var pa = (p[i * 2] != null) ? p[i * 2] : [];
+			var e = Type.createInstance(c, pa);
 			e.x = Game.WIDTH / 2 + Game.WIDTH / 8 * (i * 2 + 1) - e.cx + Game.INST.shakeOffset;
 			e.y = y;
 			currentWave.push(e);
 			
-			e = Type.createInstance(c, p);
+			pa = (p[i * 2 + 1] != null) ? p[i * 2 + 1] : [];
+			e = Type.createInstance(c, pa);
 			e.x = Game.WIDTH / 2 - Game.WIDTH / 8 * (i * 2 + 1) - e.cx + Game.INST.shakeOffset;
 			e.y = y;
 			currentWave.push(e);

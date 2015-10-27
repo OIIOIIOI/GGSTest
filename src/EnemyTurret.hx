@@ -26,7 +26,7 @@ class EnemyTurret extends MovingEntity
 		
 		health = 2;
 		
-		yVel = yVelMax = 0.5;
+		yVel = yVelMax = 1;
 		
 		diesOffScreen = false;
 	}
@@ -114,6 +114,7 @@ class EnemyTurret extends MovingEntity
 	{
 		super.diedOffScreen();
 		Game.INST.chain = 0;
+		UI.refresh();
 	}
 	
 }

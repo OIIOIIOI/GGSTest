@@ -72,6 +72,7 @@ class EnemyCharger extends MovingEntity
 	{
 		super.diedOffScreen();
 		Game.INST.chain = 0;
+		UI.refresh();
 	}
 	
 }

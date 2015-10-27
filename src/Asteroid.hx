@@ -9,7 +9,7 @@ import Entity;
 class Asteroid extends MovingEntity
 {
 	
-	public function new ()
+	public function new (vel:Float = 2)
 	{
 		super();
 		setAnim(Sprites.MINE);
@@ -19,8 +19,8 @@ class Asteroid extends MovingEntity
 		collList.push(CollType.PLAYER);
 		collList.push(CollType.PLAYER_BULLET);
 		
-		xVelMax = yVelMax = 2;
-		yVel = 1;
+		xVelMax = yVelMax = vel;
+		yVel = yVelMax;
 		
 		isIndestructible = true;
 		diesOffScreen = false;

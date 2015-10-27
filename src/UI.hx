@@ -18,11 +18,15 @@ class UI {
 	static var font:Font;
 	static var formatLeft:TextFormat;
 	static var formatRight:TextFormat;
+	static var formatCenter:TextFormat;
 	
 	static var scoreTitleTF:TextField;
 	static var scoreTF:TextField;
 	static var waveTF:TextField;
 	static var comboTF:TextField;
+	
+	static var bestTitleTF:TextField;
+	static var bestTF:TextField;
 	
 	static public var container:Sprite;
 	
@@ -35,6 +39,18 @@ class UI {
 		formatLeft.align = TextFormatAlign.LEFT;
 		formatRight = new TextFormat(font.fontName, 26, 0x53777A);
 		formatRight.align = TextFormatAlign.RIGHT;
+		formatCenter = new TextFormat(font.fontName, 26, 0x53777A);
+		formatCenter.align = TextFormatAlign.CENTER;
+		
+		bestTitleTF = setupTF(new TextField(), formatCenter);
+		bestTitleTF.text = "BEST SCORE";
+		bestTitleTF.x = Std.int((Game.WIDTH - bestTitleTF.width) / 2);
+		bestTitleTF.y = 0;
+		
+		bestTF = setupTF(new TextField(), formatCenter);
+		bestTF.text = "";
+		bestTF.x = bestTitleTF.x;
+		bestTF.y = bestTitleTF.y + 16;
 		
 		scoreTitleTF = setupTF(new TextField(), formatRight);
 		scoreTitleTF.text = "SPACE";
@@ -56,6 +72,8 @@ class UI {
 		comboTF.x = waveTF.x;
 		comboTF.y = scoreTF.y;
 		
+		container.addChild(bestTitleTF);
+		container.addChild(bestTF);
 		container.addChild(scoreTitleTF);
 		container.addChild(scoreTF);
 		container.addChild(waveTF);
@@ -82,6 +100,12 @@ class UI {
 			scoreTF.text = "TO SHOOT";
 			waveTF.text = "ARROWS";
 			comboTF.text = "TO MOVE";
+			bestTF.text = addZeros(Game.INST.bestScore);
+			
+			if (!container.contains(bestTitleTF))
+				container.addChild(bestTitleTF);
+			if (!container.contains(bestTF))
+				container.addChild(bestTF);
 		}
 		else
 		{
@@ -92,13 +116,18 @@ class UI {
 				comboTF.text = "NO CHAIN";
 			else
 				comboTF.text = Game.INST.chain + "-CHAIN";
+			
+			if (container.contains(bestTitleTF))
+				container.removeChild(bestTitleTF);
+			if (container.contains(bestTF))
+				container.removeChild(bestTF);
 		}
 	}
 	
 	static function addZeros (s:Int) :String
 	{
 		var string = Std.string(s);
-		while (string.length < 6) {
+		while (string.length < 8) {
 			string = "0" + string;
 		}
 		return string;

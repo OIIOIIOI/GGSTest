@@ -27,12 +27,12 @@ class Points extends MovingEntity {
 	{
 		super.update();
 		
-		if (Game.INST.getDistance(Game.INST.player, this) < 100) {
+		if (Game.INST.getDistance(Game.INST.player, this) < 150) {
 			friction = 1;
 			currentMove = Move.CHASER;
 		}
 		else {
-			friction = 0.97;
+			friction = 0.98;
 			currentMove = Move.STATIC;
 		}
 	}

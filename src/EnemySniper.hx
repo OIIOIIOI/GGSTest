@@ -26,7 +26,7 @@ class EnemySniper extends MovingEntity
 		
 		health = 3;
 		
-		yVel = yVelMax = 0.5;
+		yVel = yVelMax = 1;
 		
 		diesOffScreen = false;
 	}
@@ -43,7 +43,7 @@ class EnemySniper extends MovingEntity
 				b.x = x + cx - b.cx;
 				b.y = y + cy - b.cy;
 				// Target player
-				b.xVelMax = b.yVelMax = 1.75;
+				b.xVelMax = b.yVelMax = 2;
 				var tx = Game.INST.player.x + Game.INST.player.cx;
 				var ty = Game.INST.player.y + Game.INST.player.cy;
 				Game.TAP.x = tx - (x + cx);
@@ -105,9 +105,11 @@ class EnemySniper extends MovingEntity
 	override function diedOffScreen ()
 	{
 		super.diedOffScreen();
-		// Break chain if more than the core was remaining
-		if (health > 1)
+		// Break chain only if more than the core was remaining
+		if (health > 1) {
 			Game.INST.chain = 0;
+			UI.refresh();
+		}
 	}
 	
 }

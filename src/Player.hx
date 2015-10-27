@@ -61,6 +61,8 @@ class Player extends MovingEntity
 				
 				Game.INST.addEntity(b);
 				
+				Game.INST.addScore(-1);
+				
 				Game.INST.shake(1, 3);
 				SoundMan.playOnce(SoundMan.PLAYER_SHOT);
 				
