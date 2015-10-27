@@ -364,7 +364,7 @@ class Game extends Sprite
 		score = chain = 0;
 		speedMod = 1;
 		// Spawn first wave (Start area)
-		WaveMan.spawnWave(19);
+		WaveMan.spawnWave(0);
 		isGameOver = false;
 	}
 	
