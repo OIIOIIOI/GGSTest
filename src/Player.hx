@@ -26,7 +26,7 @@ class Player extends MovingEntity
 		collType = CollType.PLAYER;
 		collList.push(CollType.ENEMY);
 		
-		friction = 0.9;
+		friction = 0.85;
 		xVelMax = 5;
 		yVelMax = 5;
 		
@@ -79,7 +79,7 @@ class Player extends MovingEntity
 			Game.INST.spawnParticles(ParticleType.YELLOW, x + cx, y + cy, 10);
 			Game.INST.shake(6, 60);
 			Game.INST.flashTick = 10;
-			SoundMan.playOnce(SoundMan.PLAYER_DEATH);
+			SoundMan.playOnce(SoundMan.PLAYER_DEATH, 1.5);
 			Game.INST.gameOver();
 		}
 	}

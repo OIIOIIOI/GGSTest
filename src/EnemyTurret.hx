@@ -89,7 +89,7 @@ class EnemyTurret extends MovingEntity
 			SoundMan.playOnce(SoundMan.ENEMY_DEATH);
 			// Scoring
 			Game.INST.chain++;
-			Game.INST.addScore(150);
+			Game.INST.addScore(100);
 			// Spawn points
 			for (i in 0...8) {
 				var p = new Points();

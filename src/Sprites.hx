@@ -16,6 +16,10 @@ class Sprites
 	static public var ENEMY_A_SHIP:String = "enemy_a_ship";
 	static public var ENEMY_A_SHIP_HURT:String = "enemy_a_ship_hurt";
 	static public var ENEMY_CHARGER:String = "enemy_charger";
+	static public var ENEMY_CHARGER_B:String = "enemy_charger_b";
+	static public var ENEMY_SNIPER:String = "enemy_sniper";
+	static public var ENEMY_SNIPER_HURT:String = "enemy_sniper_hurt";
+	static public var ENEMY_SNIPER_CORE:String = "enemy_sniper_core";
 	static public var ENEMY_A_BULLET:String = "enemy_a_bullet";
 	static public var POINTS:String = "points";
 	static public var START:String = "start";
@@ -35,10 +39,14 @@ class Sprites
 		
 		sprites.set(PLAYER_SHIP, { data:Assets.getBitmapData("img/player.png"), frames:2, delay:3 });
 		sprites.set(PLAYER_BULLET, { data:Assets.getBitmapData("img/player_bullet.png"), frames:1, delay:0 });
-		sprites.set(MINE, { data:Assets.getBitmapData("img/asteroid.png"), frames:1, delay:0 });
+		sprites.set(MINE, { data:Assets.getBitmapData("img/asteroid.png"), frames:2, delay:10 });
 		sprites.set(ENEMY_A_SHIP, { data:Assets.getBitmapData("img/enemy_a.png"), frames:5, delay:15 });
 		sprites.set(ENEMY_A_SHIP_HURT, { data:Assets.getBitmapData("img/enemy_a_hurt.png"), frames:5, delay:15 });
 		sprites.set(ENEMY_CHARGER, { data:Assets.getBitmapData("img/enemy_b.png"), frames:1, delay:0 });
+		sprites.set(ENEMY_CHARGER_B, { data:Assets.getBitmapData("img/enemy_c.png"), frames:1, delay:0 });
+		sprites.set(ENEMY_SNIPER, { data:Assets.getBitmapData("img/enemy_sniper.png"), frames:3, delay:20 });
+		sprites.set(ENEMY_SNIPER_HURT, { data:Assets.getBitmapData("img/enemy_sniper_hurt.png"), frames:3, delay:15 });
+		sprites.set(ENEMY_SNIPER_CORE, { data:Assets.getBitmapData("img/enemy_sniper_core.png"), frames:2, delay:20 });
 		sprites.set(ENEMY_A_BULLET, { data:Assets.getBitmapData("img/enemy_a_bullet.png"), frames:1, delay:0 });
 		sprites.set(POINTS, { data:Assets.getBitmapData("img/points.png"), frames:4, delay:8 });
 		sprites.set(START, { data:Assets.getBitmapData("img/start.png"), frames:2, delay:4 });

@@ -11,10 +11,18 @@ import Particle;
 class EnemyCharger extends MovingEntity
 {
 	
-	public function new ()
+	var hard:Bool;
+	
+	public function new (h:Bool = false)
 	{
 		super();
-		setAnim(Sprites.ENEMY_CHARGER, true);
+		hard = h;
+		if (hard) {
+			setAnim(Sprites.ENEMY_CHARGER_B);
+			health = 2;
+		}
+		else
+			setAnim(Sprites.ENEMY_CHARGER);
 		
 		collRadius = 12;
 		collType = CollType.ENEMY;
@@ -39,7 +47,10 @@ class EnemyCharger extends MovingEntity
 			SoundMan.playOnce(SoundMan.ENEMY_DEATH);
 			// Scoring
 			Game.INST.chain++;
-			Game.INST.addScore(100);
+			if (hard)
+				Game.INST.addScore(70);
+			else
+				Game.INST.addScore(40);
 			// Spawn points
 			for (i in 0...5) {
 				var p = new Points();
@@ -47,6 +58,13 @@ class EnemyCharger extends MovingEntity
 				p.y = y + cy + (Std.random(2) * 2 - 1) * Std.random(16);
 				Game.INST.addEntity(p);
 			}
+		}
+		else
+		{
+			Game.INST.spawnParticles(ParticleType.ORANGE, x + cx, y + cy, 2);
+			SoundMan.playOnce(SoundMan.HURT);
+			if (health == 1)
+				setAnim(Sprites.ENEMY_CHARGER);
 		}
 	}
 	

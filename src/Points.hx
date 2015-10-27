@@ -41,7 +41,7 @@ class Points extends MovingEntity {
 	{
 		super.hurt(c);
 		SoundMan.playOnce(SoundMan.POINTS, 0.25);
-		Game.INST.addScore(21);
+		Game.INST.addScore(9);
 	}
 	
 }

@@ -20,18 +20,17 @@ class WaveMan {
 			case 0:
 				addStartArea();
 			case 1:
-				addSideChargers(-100);
-				addTurret(-100);
-				addDoubleTurret(-150);
+				addDual(EnemyCharger, -100);
+				addCenter(EnemySniper, -50);
 			case 2:
-				addMine(-100);
-				addDoubleMine(-200);
-				addTripleMine(-300);
+				addCenter(EnemyCharger, -100);
+				addDual(EnemyCharger, -150, [true]);
+				addTriple(EnemyCharger, -200);
 			case 3:
-				addTurret(-100);
-				addTurret(-300);
-				addTripleMine(-150);
-				addDoubleTurret(-200);
+				addCenter(EnemyCharger, -100, [true]);
+				addDual(EnemyCharger, -150, [true]);
+				addTriple(EnemyCharger, -200);
+				addQuad(EnemyCharger, -250);
 		}
 		
 		for (e in currentWave) {
@@ -43,10 +42,22 @@ class WaveMan {
 	
 	static public function update ()
 	{
-		currentWave = currentWave.filter(Game.INST.filterDead);
+		currentWave = currentWave.filter(waveFilter);
 		// Spawn the next wave if the current one is done
 		if (currentWave.length == 0)
 			spawnWave(waveIndex + 1);
+	}
+	
+	static function waveFilter (e:Entity) :Bool
+	{
+		// Filter dead entities
+		if (e.isDead)
+			return false;
+		// Filter indestructible entities that are more than 3/4 of the way out
+		else if (e.isIndestructible && e.y + e.cy > Game.HEIGHT / 4 * 3)
+			return false;
+		else
+			return true;
 	}
 	
 	static function addStartArea ()
@@ -57,70 +68,71 @@ class WaveMan {
 		currentWave.push(e);
 	}
 	
-	static function addSideChargers (y:Int = 0)
+	static function addCenter (c:Class<Entity>, y:Int = 0, p:Array<Dynamic> = null)
 	{
-		for (i in 0...3)
-		{
-			// Left colummn
-			var e = new EnemyCharger();
-			e.x = 16 - e.cx + Game.INST.shakeOffset;
-			e.y = -i * 80 + y;
-			currentWave.push(e);
-			// Right column
-			e = new EnemyCharger();
-			e.x = Game.WIDTH - 16 - e.cx + Game.INST.shakeOffset;
-			e.y = -i * 80 + 40 + y;
-			currentWave.push(e);
-		}
-	}
-	
-	static function addMine (y:Int = 0)
-	{
-		var e = new Asteroid();
+		if (p == null)	p = [];
+		var e = Type.createInstance(c, p);
 		e.x = Game.WIDTH / 2 - e.cx + Game.INST.shakeOffset;
 		e.y = y;
 		currentWave.push(e);
 	}
 	
-	static function addDoubleMine (y:Int = 0)
+	static function addLeft (c:Class<Entity>, y:Int = 0, p:Array<Dynamic> = null)
 	{
+		if (p == null)	p = [];
+		var e = Type.createInstance(c, p);
+		e.x = Game.WIDTH / 6 - e.cx + Game.INST.shakeOffset;
+		e.y = y;
+		currentWave.push(e);
+	}
+	
+	static function addRight (c:Class<Entity>, y:Int = 0, p:Array<Dynamic> = null)
+	{
+		if (p == null)	p = [];
+		var e = Type.createInstance(c, p);
+		e.x = Game.WIDTH / 6 * 5 - e.cx + Game.INST.shakeOffset;
+		e.y = y;
+		currentWave.push(e);
+	}
+	
+	static function addDual (c:Class<Entity>, y:Int = 0, p:Array<Dynamic> = null)
+	{
+		if (p == null)	p = [];
 		for (i in 0...2)
 		{
-			var e = new Asteroid();
+			var e = Type.createInstance(c, p);
 			e.x = Game.WIDTH / 3 * (i + 1) - e.cx + Game.INST.shakeOffset;
 			e.y = y;
 			currentWave.push(e);
 		}
 	}
 	
-	static function addTripleMine (y:Int = 0)
+	static function addTriple (c:Class<Entity>, y:Int = 0, p:Array<Dynamic> = null)
 	{
+		if (p == null)	p = [];
 		for (i in 0...3)
 		{
-			var e = new Asteroid();
-			e.x = Game.WIDTH / 4 * (i + 1) + 32 * (i - 1) - e.cx + Game.INST.shakeOffset;
+			var e = Type.createInstance(c, p);
+			e.x = Game.WIDTH / 4 * (i + 1) + 24 * (i - 1) - e.cx + Game.INST.shakeOffset;
 			e.y = y;
 			currentWave.push(e);
 		}
 	}
 	
-	static function addTurret (y:Int = 0)
+	static function addQuad (c:Class<Entity>, y:Int = 0, p:Array<Dynamic> = null)
 	{
-		var e = new EnemyTurret();
-		e.x = Game.WIDTH / 2 - e.cx + Game.INST.shakeOffset;
-		e.y = y;
-		currentWave.push(e);
-	}
-	
-	static function addDoubleTurret (y:Int = 0)
-	{
-		var e = new EnemyTurret();
-		e.x = 48 - e.cx + Game.INST.shakeOffset;
-		e.y = y;
-		currentWave.push(e);
-		e = new EnemyTurret();
-		e.x = Game.WIDTH - 48 - e.cx + Game.INST.shakeOffset;
-		e.y = y;
-		currentWave.push(e);
+		if (p == null)	p = [];
+		for (i in 0...2)
+		{
+			var e = Type.createInstance(c, p);
+			e.x = Game.WIDTH / 2 + Game.WIDTH / 8 * (i * 2 + 1) - e.cx + Game.INST.shakeOffset;
+			e.y = y;
+			currentWave.push(e);
+			
+			e = Type.createInstance(c, p);
+			e.x = Game.WIDTH / 2 - Game.WIDTH / 8 * (i * 2 + 1) - e.cx + Game.INST.shakeOffset;
+			e.y = y;
+			currentWave.push(e);
+		}
 	}
 }
