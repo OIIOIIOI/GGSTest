@@ -26,8 +26,8 @@ class Game extends Sprite
 	static public var TAP:Point = new Point();// Throwaway Point
 	// I like to have these instead of creating a new Rectangle or Point each time I need one temporarily
 	
-	static public var WIDTH:Int = Lib.current.stage.stageWidth;
-	static public var HEIGHT:Int = Lib.current.stage.stageHeight;
+	static public var WIDTH:Int = 400;
+	static public var HEIGHT:Int = 600;
 	
 	static public var INST:Game;// Game instance for external access
 	

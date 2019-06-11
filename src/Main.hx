@@ -18,7 +18,8 @@ class Main extends Sprite
 		Sprites.init();
 		Controls.init();
 		// Create and add game
-		Lib.current.stage.addChild(new Game());
+		//Lib.current.stage.addChild(new Game());
+		addChild(new Game());
 	}
 
 }
